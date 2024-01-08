@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin-top: 100px;
+        }
+        #wrapper {
+            width: 600px;
+            height: 600px;
+            background-color: brown;
+            margin: auto;
+            position: relative;
+        }
+        #frame {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            left: 200px;
+            top: 200px;
+            background-color: aquamarine;
+            position: relative;
+            /* overflow: hidden; */
+        }
+    </style>
+    <script>
+        let table;
+        let targetX = -200;
+        let targetY = -200;
+        let x = -1;
+        let y = -1;
+       
+        function init() {
+            //테이블을 동적으로 생성하고, 각 셀에 이미지
+            //도 동적으로 생성하여 껴넣자..프로그래밍적으로..
+            table = document.createElement("table");//<table></table>
+            let n = 1; //이미지명을 결정지을 수 있는 지역변수
+            for(let i = 1; i <= 3; i++) {  //3층 tr
+                let tr=document.createElement("tr"); //<tr></tr>
+
+
+                for(let a = 1; a <= 3; a++) {
+                    let td=document.createElement("td");//<td></td>
+                    //td에 이미지 넣기
+                    let img = document.createElement("img");
+                    img.src = "../images/mt/img"+n+".jpg";
+                    img.style.width = 200+"px";
+                    img.style.height = 200+"px";
+                    n++;
+                    td.appendChild(img); //td에 이미지넣기
+                    tr.appendChild(td); //tr에 td 넣기
+                }
+
+
+                table.appendChild(tr);
+            }
+
+
+            table.style.border="1px solid red";
+            table.style.width=600+"px";
+            table.style.height=600+"px";
+            table.style.position="absolute";//frame기준으로
+            table.style.left=-200+"px";
+            table.style.top=-200+"px";
+
+
+            //frame  div 에 테이블 추가
+            let frame = document.getElementById("frame");
+            frame.appendChild(table);
+        }
+        //키보드의 방향키를 누르면 table의 좌표를 조정
+        function move() {
+            let key = event.keyCode; //아스키코드받기
+            switch(key) {
+                case 37: x = x - 1; break;//좌측으로 이동효과
+                case 39: x = x + 1; break;//우측으로 이동효과
+                case 38: y = y - 1; break;//위쪽으로 이동효과
+                case 40: y = y + 1; break;//아래쪽으로 이동효과
+            }
+            targetX = x * 200;
+            targetY= y * 200;
+
+
+            //테이블의 좌표를 변경
+            table.style.left = targetX + "px";
+            table.style.top = targetY + "px";
+        }
+        addEventListener("load", function() {
+            init();
+        })
+    </script>
+</head>
+<body onkeydown="move()">
+    <div id="wrapper">
+        <div id="frame"></div>
+    </div>
+</body>
+</html>

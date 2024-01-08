@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let op = true;
+        addEventListener('load', function(){
+            let wrap = document.createElement('div');
+            document.body.appendChild(wrap);
+            wrap.id = "wrap";
+            wrap.style.cssText ="position:relative; width:500px; height:500px; background-image:url(../images/Gallerxy/intro.jpg)";
+            
+            let text = document.createElement('div');
+            wrap.appendChild(text);
+            text.innerHTML = "insert coin";
+            text.id = "text";
+            text.style.cssText = "position:absolute;  color:yellow; top:50%;  left:50%; transform:translate(-50%, -50%);"
+            texts = document.querySelector('#text');
+            setInterval('changeText()', 500);
+
+        });
+    function changeText(){
+        op = Number(!op);
+        texts.style.opacity = op;
+        // if(op === true){
+        //     texts.style.opacity = 0;
+        // } else {
+        //     texts.style.opacity = 1;
+        // }
+    }
+
+</script>
+
+</head>
+<body>
+</body>
+</html>

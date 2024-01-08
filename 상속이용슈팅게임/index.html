@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./GameObject.js"></script>
+    <script src="./Hero.js"></script>
+    <script src="./Enemy.js"></script>
+    <script src = "Bullet.js"></script>
+    <style>
+        #wrapper{
+            width:1280px;
+            height:640px;
+            background-image: url("../images/Airplane/game_bg.jpg");
+            margin: 0 auto;
+            position: relative;
+        }
+    </style>
+    <script>
+        let wrapper;
+        let hero;
+        let enemyImgArray = ["../images/Airplane/enemy1.jpg",
+                            "../images/Airplane/enemy2.jpg",
+                            "../images/Airplane/enemy3.png",
+                            "../images/Airplane/enemy4.jpg"
+    ];
+        let bulletArray = [];
+        let enemyArray = [];
+        function createHero(){
+            hero = new Hero(wrapper,"../images/Airplane/plane.png",100,100,50,50,0,0);
+        }
+        function createEnemy(){
+            for(let i = 0; i < enemyImgArray.length; i++){
+                
+                let enemy = new Enemy(wrapper, enemyImgArray[i], 1000, i*120, 70, 60, -1, 0);
+                enemyArray.push(enemy);
+            }
+        }
+        function gameLoop(){
+            hero.move();
+            for(let i = 0; i < enemyArray.length; i++){
+                enemyArray[i].move();
+            }
+            for(let i = 0; i < bulletArray.length; i++){
+
+                bulletArray[i].move();
+            }
+        }
+        function fire(){ 
+
+                let bullet = new Bullet(wrapper, "../images/supermario/mushroom.jpg", hero.x + hero.width, hero.y + hero.height/2, 5,5,2,0);
+                bulletArray.push(bullet);
+
+        }
+        addEventListener('load', function(){
+            wrapper = document.getElementById('wrapper');
+            createHero();
+            createEnemy();
+        
+            document.body.addEventListener('keydown', function(){
+                switch(event.keyCode){
+                    case 32: fire(); break;
+                    case 37: ; break;
+                    case 39: ; break;
+                    case 38: ; break;
+                    case 40: ; break;
+                }
+            });
+            setInterval('gameLoop()',10);
+        });
+    </script>
+</head>
+<body>
+
+    <div id = "wrapper"></div>
+
+</body>
+</html>

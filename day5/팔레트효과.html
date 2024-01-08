@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:700px;
+            height:500px;
+            margin: 0 auto;
+            /* background-color: red; */
+
+        }
+        #header{
+            display:flow-root;
+        }
+        .thumb{
+            width:100px;
+            height:100px;
+            border:1px solid black;
+            box-sizing: border-box;
+            float:left;
+        }
+        #content{
+            width:100%;
+            height:100%;
+            /* float:left; */
+            /* background-color: orange; */
+        }
+    </style>
+</head>
+<body>
+    
+<div id = 'wrapper'>
+    <div id = 'header'>
+        <div class="thumb" style="background-color: red;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: orange;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: yellow;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: green;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: blue;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: navy;" onmouseover="setBg(this)"></div>
+        <div class="thumb" style="background-color: purple;" onmouseover="setBg(this)"></div>
+    </div>
+    <div id = 'content'></div>
+</div>
+
+
+<script>
+    function setBg(color){
+
+        let content = document.getElementById('content');
+        content.style.backgroundColor = color.style.backgroundColor; 
+
+    }
+</script>
+</body>
+</html>

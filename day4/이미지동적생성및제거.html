@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:900px;
+            height:900px;
+            background-color: yellow;
+            
+        }
+    </style>
+    <script>
+        //select 박스에서 선택한 이미지 경로를 이용하여
+        // 동적으로 img 태그를 생성한 후, wrapper에 추가하자.
+        function create(){
+            let ea = document.getElementById('ea');
+            let wrapper = document.getElementById('wrapper');
+
+            for(let i = 1; i <=ea.value; i++){
+                let img = document.createElement('img');
+                img.src = "../images/Gallerxy/" + document.getElementById('fly').value;
+                img.addEventListener('click', function(){
+                    wrapper.removeChild(img);
+                })
+                wrapper.appendChild(img);
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <select id = "fly">
+        <option value ="blue_king.png">파란 왕파리</option>
+        <option value ="green_king.png">녹색 왕파리</option>
+        <option value ="enemy2.png">파란 졸병파리</option>
+        <option value ="enemy1.png">빨간 졸병파리</option>
+    </select>
+
+    <input id = 'ea' type="text" value = "1" placeholder="마리 수" size="5">
+    <button onclick="create()">생성하기</button>
+    <div id = 'wrapper'>
+
+    </div>
+</body>
+</html>

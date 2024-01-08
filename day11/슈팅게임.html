@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1280px;
+            height:640px;
+            margin: 0 auto;
+            background-image: url(../images/Airplane/game_bg.jpg);
+            background-size: 1280px 640px;
+            position:relative;
+            overflow : hidden;
+        }
+    </style>
+    <script src = "../lib/plane.js"></script>
+    <script src = "../lib/Bullet.js"></script>
+    <script src = "../lib/Enemy.js"></script>
+    <script src = "../lib/common.js"></script>
+    <script>
+        let wrapper;
+        let plane; // 비행기의 인스턴스를 보관할 전역변수
+        // let bullet; // 총알 한 개를 보관할 수 있는 전역변수
+        let bulletArray = []; // 총알 다수 개를 보관할 수 있는 전역변수
+        let enemyArray = [];
+
+        function gameLoop(){
+            //비행기 move() 메서드 호출
+            plane.move();
+            for(let i = 0; i<bulletArray.length; i++){
+
+                bulletArray[i].move();
+            }
+            for(let a = 0; a < enemyArray.length; a++){
+                enemyArray[a].move();
+            }
+        }
+        function fire(){
+            let bullet = new Bullet(wrapper,plane.x+plane.width,plane.y+(plane.height*0.5),10,10,5,0,"red");
+            bulletArray.push(bullet);
+        }
+        function createEnemy(){
+            for(let i = 0; i < 4; i++){
+
+                let enemy = new Enemy(wrapper,"../images/Airplane/enemy1.jpg", 1200,i*120,50,50,-3,0);
+                enemyArray.push(enemy);
+            }
+           
+        }
+        addEventListener('load', function(){
+            wrapper = document.getElementById('wrapper');
+            plane = new Plane(wrapper,0,200,50,50,0,0);
+            
+            createEnemy();
+            setInterval('gameLoop()',10);
+            
+            //키보드 이벤트 연결
+            document.body.addEventListener('keydown', function(){
+                switch (event.keyCode){
+                    case 37: plane.velX = -3; break; // 좌
+                    case 39: plane.velX = 3; break; // 우
+                    case 38: plane.velY = -3; break; // 위
+                    case 40: plane.velY = 3; break; // 아래
+                    case 32: fire();break;
+                }
+            });
+            //멈추기
+            document.body.addEventListener('keyup', function(){
+                switch (event.keyCode){
+                    case 37: plane.velX = 0; break; // 좌
+                    case 39: plane.velX = 0; break; // 우
+                    case 38: plane.velY = 0; break; // 위
+                    case 40: plane.velY = 0; break; // 아래
+                }
+            });
+        });
+
+
+
+    </script>
+</head>
+<body>
+    
+<div id = "wrapper"></div>
+
+
+</body>
+</html>

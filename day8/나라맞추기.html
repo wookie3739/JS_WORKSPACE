@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper {
+            width: 600px;
+            height: 700px;
+            background-color: pink;
+            margin: auto;
+        }
+        #quiz {
+            width: 100%;
+            height: 300px;
+            background-color: aqua;
+        }
+
+        #hint {
+            width: 100%;
+            height: 200px;
+            background-color: plum;
+        }
+
+        #hint button {
+            width: 100%;
+        }
+        #feedback {
+            width: 100%;
+            height: 200px;
+            background-color: coral;
+        }
+
+        #quiz img {
+            width: 100%;
+            height: 250px;
+        }
+        #quiz input {
+            width: 96%;
+            height: 45px;
+            background-color: lightcoral;
+        }
+        /* #quiz button {
+            width: 100%;
+
+        } */
+        #feedback {
+            font-size: 150px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 200px;
+        }
+    </style>
+    <script>
+        let pic;
+        let keyword;
+        let info;
+        let feedback;
+        let index = 0; // 몇 번 째 나라 정보를 접근할지를 결정 짓는 이차원 배열의 index다
+
+        // 게임에 사용할 나라 정보 구축하기
+        let nationArray = [ 
+             ["프랑스", "파리", "프랑스어", "유럽", "프랑스.png"],
+             ["독일", "베를린", "독일어", "유럽", "독일.webp"],
+             ["폴란드 ", "바르샤바", "폴란드어", "유럽", "폴란드.png"],
+             ["미국", " 워싱턴", "영어", "아메리카", "미국.jpg"],
+             ["영국", "런던", "영어", "유럽", "영국.png"],
+             ["호주", "시드니", "영어", "오세아니아", "호주.png"],
+             ["러시아", "모스크", "러시아어", "러시아", "러시아.png"],
+             ["일본어", "도쿄", "일본어", "동아시아", "일본.png"],
+             ["덴마크", "코펜하겐", "프덴마크어", "유럽", "덴마크.jpg"],
+             ["스웨덴", "스톡홀름", "스웨덴어", "스페인.png"]
+
+            ];
+
+        function showData() {
+            let nation = nationArray[index];
+            console.log(nation);
+
+            // 추출한 배열로부터 나라 국기 처리
+            pic.src = "../images/국기/" + nation[4];
+
+            // 힌트 영역에 정보 출력
+            info.innerText = "수도:" + nation[1];
+            info.innerText += "\n"; // 줄바꿈
+            info.innerText = "지역:" + nation[3];
+
+            
+        }
+
+        // 엔터키 쳤을 때만, 다음 국가 정보 가져오기
+        function enterKey() {
+            if(event.keyCode == 13) {
+                // 답과 입력값이 일치하는지 여부 판단 후 맞으면 아래 코드 수행
+                let nation = nationArray[index]; // 국가 추출
+
+                if (keyword.value == nation[0]) {
+                    index++;
+                    showData(); // 국가 정보 출력
+                    showHideHint(false); // 힌트는 다시 안 보이도록 
+                    feedback.innerText = "O";
+                    keyword.value ="";
+                } else {
+                    feedback.innerText = "X";
+                    keyword.value ="";
+                }
+
+             } 
+          }
+        function showHideHint(flag) {
+            if(flag) {
+            info.style.display = "block";
+            }else {
+                info.style.display = "none";
+            }
+        }
+        function init() {
+            showData();
+            showHideHint(false); // 처음에는 안 보이게
+        }
+
+        addEventListener("load", function(){
+            // 제어할 요소들을 전역으로 빼놓자
+            pic = document.getElementById("pic");
+            keyword = document.getElementById("keyword");
+            info = document.getElementById("info");
+            feedback = document.getElementById("feedback");
+            
+            init();
+        });
+    </script>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div id="quiz">
+            <img src="" id="pic">
+            <input type="text" id="keyword" placeholder="나라명을 입력하세요" onKeyUp="enterKey()">
+        </div>
+        <div id="hint">
+            <button onClick="showHideHint(true)">힌트 보기</button>
+            <p id="info"></p>
+        </div>
+        <div id="feedback">X</div>
+    </div>
+    
+</body>
+</html>

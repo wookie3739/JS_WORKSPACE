@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let arr = new Array(3);
+        arr[0] = '가위.png';
+        arr[1] = '주먹.png';
+        arr[2] = '보.png';
+        function execute(){
+            let img = document.createElement('img');
+            let r = Math.random();
+            let n = r * arr.length; 
+            let filename = arr[parseInt(n)];
+            // console.log(filename);
+            img.src = '../images/' + filename;
+            document.body.appendChild(img);
+
+
+        }
+
+        function init(){
+            let wrapper = document.getElementById('wrapper');
+
+
+
+        }
+
+        addEventListener('load', function(){
+            init();
+        });
+
+
+    </script>
+</head>
+<body>
+    <button onClick="execute()">가위, 바위, 보 실행</button>
+    <div id = 'wrapper'></div>
+</body>
+</html>

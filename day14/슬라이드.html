@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 800px;
+            height:210px;
+            background-color: yellow;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #detail {
+            width:420px;
+            height:380px;
+            border:1px solid black;
+            margin: 0 auto;
+
+        }
+        #detail img{
+            width:100%;
+            height:100%;
+        }
+    </style>
+    <script>
+        let srcArray = [
+            "../images/가위.png",
+            "../images/주먹.png",
+            "../images/보.png",
+            "../images/cream.png",
+            "../images/dart.jpg",
+            "../images/firefly.png"
+        ];
+        let imagesArray = [];
+        let wrapper;
+        // let a = 0.1;
+        let img;
+        let count = 0;
+        let flag = true;
+        let detail;
+        let imgs;
+        
+        class Image{
+            constructor(container, url, width, height, x, velX){
+                this.container = container;
+                this.img = document.createElement('img');
+                this.img.src = url;
+                this.width = width;
+                this.height = height;
+                this.x = x;
+                this.velX = velX;
+
+
+                //스타일 설정
+                this.img.style.width = this.width + "px";
+                this.img.style.height = this.height + "px";
+                this.img.style.left = this.x + "px";
+                // this.img.style.velX = this.velX + "px";
+                this.img.style.position = "absolute";
+                 
+                //이미지에 마우스 올려놓으면 flag = false;
+                this.img.addEventListener('mouseover', ()=>{
+                    flag = false;
+                });
+                this.img.addEventListener('mouseout', ()=>{
+                    flag = true;
+                });
+                this.container.appendChild(this.img);
+                this.img.addEventListener('click', () => {
+                    getDetail(this.img.src);
+                });
+            }
+            move(){
+
+                this.x -= this.velX;
+                this.img.style.left = this.x + "px"; 
+
+            }
+        }
+
+
+        //이미지 상세 처리
+        function getDetail(path){
+            let detail = document.getElementById('detail');
+            if(imgs !=undefined){
+
+                detail.removeChild(imgs);
+            }
+            imgs = document.createElement('img');
+            imgs.src = path;
+            detail.appendChild(imgs);
+        }
+
+        addEventListener('load', function(){
+           wrapper = document.getElementById('wrapper');
+            for(let i = 0; i < srcArray.length; i++){
+
+                img = new Image(wrapper, srcArray[i], 180, 200, (200*i), 5);
+                imagesArray.push(img);
+            }
+            setInterval(function(){
+               
+                if(flag){
+
+                    for(let i = 0; i < imagesArray.length; i++){
+                        imagesArray[i].move();
+                    }
+                }
+                if(imagesArray[0].x <= -180){
+                    console.log("넘겼어요");
+                    // imagesArray[0].x = imagesArray[imagesArray.length -1].x + 200;
+                    imagesArray.splice(0,1);
+                    imagesArray.push(new Image(wrapper, srcArray[count++], 180, 200, (200*imagesArray.length), 5));
+                    
+                    if(count >= imagesArray.length){
+                        count = 0;
+                    }
+                }
+            },10);
+        });
+
+
+
+
+    </script>
+</head>
+<body>
+    <div id = "wrapper"></div>
+    <div id = "detail"></div>
+
+</body>
+</html>

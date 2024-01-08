@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let color = new Array(7);
+        color[0] = "red";
+        color[1] = "orange";
+        color[2] = "yellow";
+        color[3] = "green";
+        color[4] = "blue";
+        color[5] = "navy";
+        color[6] = "purple";
+        let index = 0; // 몇 번째 색상을 접근할지를 결정짓는 변수
+        addEventListener('load', function(){
+            let bt = document.querySelector('button');
+            bt.addEventListener('click', function(){
+                if(index >= color.length){
+                    index = 0;
+                    document.body.style.background = color[index];
+                }
+                document.body.style.background = color[index++];
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <button>다음색</button>
+</body>
+</html>

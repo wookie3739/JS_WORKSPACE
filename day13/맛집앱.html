@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:100%;
+            height:1000px;
+            /* background-color: yellow; */
+        }
+        aside{
+            width:15%;
+            height:100%;
+            /* background-color: aqua; */
+            float: left;
+        }
+        section{
+            width:85%;
+            height:100%;
+            /* background-color: aquamarine; */
+            float:left;
+        }
+        #view-mode{
+            width:100%;
+            height:50px;
+            /* background-color: red; */
+            text-align: center;
+            line-height: 50px;
+        }
+        #list{
+            width:100%;
+            height:950px;
+            /* background-color: purple; */
+        }
+        #content{
+            width:100%;
+            height:950px;
+            /* background-color: blue; */
+        }
+        aside *{
+            width:96%;
+        }
+        aside input {
+            height: 40px;
+            font-size: 13px;
+            margin-top : 5px;
+        }
+        textarea{
+            height:300px;
+            background-color: yellow;
+            margin-top : 5px;
+        }
+        #preview{
+            height:150px;
+            /* background-color: blue; */
+        }
+    </style>
+    <script src = "../lib/common.js"></script>
+    <script>
+        let content;
+        let list;
+        let view; // 보여질 div 배열
+        let preview // 보여질 조그만한 이미지
+        let filename; // 최종적으로 선택된 이미지의 이름
+        let storeArray = []; // 상점들을 누적시킬 배열(json)
+        let map; // 구글 맵 객체
+
+        //보였다 안 보였다 하기 true = 보이기, false 안 보이기
+        function showHide(n){ // 보이고 싶은 배열의 index를 넘기자
+            for(let i = 0; i < view.length; i++){
+                if(n==i){
+                    view[i].style.display = "block";
+                }else{
+                    view[i].style.display = "none";
+                }
+            }
+
+
+        }
+        //파일 찾기 컴포넌트에서 선택된 이미지를 이용하여, preview 영역에 출력
+        //여기서의 obj 매개변수는 input type = "file" 컴포넌트이다.
+        // images 내에서만 가져오자.
+        function previewImg(obj){
+            filename = getFileName(obj.value);
+            console.log(filename);
+
+            preview.src = "../images/" + filename;
+
+        }
+        // 상점 하나를 등록한다.
+        function regist(){
+            //비어있는 데이터를 선언
+            //일차원 배열은 데이터 접근 시 0,1 같은 index만을 사용해야한다.
+            //반복문이나 , 규칙은 있지만 직관성이 떨어진다.
+            let store = {
+                store_name : form1.store_name.value,
+                lati : form1.lati.value,
+                longi : form1.longi.value,
+                url : form1.url.value,
+                intro : form1.intro.value,
+                icon : filename
+            };
+            //완성된 상점 1점포를 storeArray에 누적
+            storeArray.push(store);
+            console.log("현재까지 생성 된 JSON 내용", store);
+            console.log(storeArray.length);
+            getList(); // 목록보기
+            //지도에도 추가
+            addStore(store);
+        }
+        //구글 맵 객체에 우리가 원하는 아이콘으로 마커를 대체하고,
+        // infowindow를 띄워서 표현해보자.
+        function addStore(obj){
+            console.log("방금 등록된 상점의 위도", obj.lati);
+            //마커 하나 생성
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(obj.lati, obj.longi),
+                animation:google.maps.Animation.BOUNCE,
+                icon:{
+                    url: '../images/'+ obj.icon,
+                    scaledSize : new google.maps.Size(45,45)   
+                }
+            });
+
+            marker.setMap(map);
+
+            //메시지 창도 띄우기
+            let str = obj.intro;
+            str += "<br>";
+            str += "<a href = \""+obj.url+"\">바로가기</a>"
+            var infowindow = new google.maps.InfoWindow({
+                content: str
+            });
+
+            infowindow.open(map,marker);
+        }
+        // storeArray에 들어있는 상점들을 표로 시각화 시켜보자
+        function getList(){
+            let tag = "<table width = \"100%\" border = \"1px\">";
+                tag += "<tr>";
+                    tag += "<td>No</td>";
+                    tag += "<td>이미지</td>";
+                    tag += "<td>상점명</td>";
+                    tag += "<td>위도</td>";
+                    tag += "<td>경도</td>";
+                    tag += "<td>네이버플레이스</td>";
+                tag += "</tr>";
+
+                for(let i = 0; i < storeArray.length; i++){
+                    let store = storeArray[i]; // 각 인덱스에 들어있는 상점을 꺼내오기
+                    tag += "<tr>";
+                        tag += "<td>No</td>";
+                        tag += "<td><img width = \"45px\" src = \"../images/"+store.icon+"\"></td>";
+                        tag += "<td>"+store.store_name+"</td>";
+                        tag += "<td>"+store.lati+"</td>";
+                        tag += "<td>"+store.longi+"</td>";
+                        tag += "<td>"+store.url+"</td>";
+                    tag += "</tr>";
+                }
+                tag += "</table>";
+                list.innerHTML = tag;
+        }
+        //이미 준비된 정보를 이용하여 상점 정보 보여주기
+        function load(){
+            //기존의 storeArray 배열에 common.js에 우리가 만든 데이터로 대체
+            storeArray = getStoreList();
+            getList(); // 표로 출력
+            for(let i = 0; i < storeArray.length; i++){
+                addStore(storeArray[i]); // 지도에 추가하기
+            }
+
+        }
+
+        function initMap(){
+            list = document.getElementById('list');
+            content = document.getElementById('content');
+            view = document.getElementsByName('view');
+            preview = document.getElementById('preview');
+
+            showHide(1);
+
+            //구글 맵 객체를 메모리에 올리기
+            map = new google.maps.Map(content, {
+            center:new google.maps.LatLng(37.61908, 126.7191),
+            zoom:19,
+        });
+        }
+
+    </script>
+</head>
+<body>
+    <div id = "wrapper">
+        <aside>
+            <!-- form 태그는 html 입력 컴포넌트들을 서버에 전송시 전송 범위를 설정하는
+            양식 태그이다. -->
+            <form name = "form1">
+                <input type="text" name="store_name" id="" placeholder="맛집 명 입력">
+                <input type="text" name="lati" id="" placeholder="위도 입력">
+                <input type="text" name="longi" id="" placeholder="경도 입력">
+                <input type="text" name="url" id="" placeholder="네이버 플레이스 url">
+                <textarea name="intro" id="" placeholder="상점 소개"></textarea>
+                <input type="file" placeholder="상점 이미지 등록" onChange = "previewImg(this)">
+                <img id = "preview">
+                <button type = "button" onClick = "regist()">등록</button>
+                <button type = "button" onClick = "load()">저장</button>
+
+            </form>
+        </aside>
+        <section>
+            <div id = "view-mode">
+                <button onClick = "showHide(0)">표로 보기</button>
+                <button onClick = "showHide(1)">지도로 보기</button>
+            </div>
+            <div id = "list" name = "view"></div>
+            <div id = "content" name = "view"></div>
+        </section>
+    </div>
+</body>
+</html>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2WllNTLdaoOO_IxUJ0rVaad0DopxLeao&callback=initMap"></script>

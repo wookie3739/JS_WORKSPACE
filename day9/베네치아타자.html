@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1200px;
+            height:900px;
+            /* background-color: yellow; */
+            margin: 0 auto;
+        }
+        #control{
+            width:200px;
+            height:100%;
+            float:left;      
+            background-color: red;
+        }
+        #content{
+            width:1000px;
+            height:100%;
+            /* background-color: green; */
+            float:left;
+            position:relative;
+            overflow:hidden;
+        }
+        #keyword{
+            width:96%;
+            height:75px;
+            font-size: 35px;
+        }
+        #hp-box{
+            width:100%;
+            height:200px;
+            background-color: yellow;
+            position: relative;
+        }
+        #bt, select, button{
+            margin-top:5px;
+            width:100%;
+            height:40px;
+            font-size: 30px;
+        }
+
+
+    </style>
+    <script src = "../lib/common.js"></script>
+    <script>
+        //게임에 사용할 단어들을 배열화 시켜놓아야함(배열)
+        //1) 동시에 내려오게(반복문) 처리
+        //2) 입력 단어와 하강중인 단어와의 일치 여부 판단(반복문)
+        let word = 
+        [
+            ["광화문","불꽃놀이","자동차","의사","감자","사랑","햄버거","우주","선생님","사탕"],
+            ["컴퓨터","자바","유리","가수","저녁","무지개","달","해","별","구름"],
+            ["볶음밥","짜장면","짬뽕","돈까스","순대","떡볶이","휴대폰","수업","집","게임"]
+            
+        ];
+        let content;
+        let keyword;
+        let spanArray =[]; // 단어를 담고있는 span의 정보를 담기위한 배열
+        let velY = 5; //5걸음씩 내려오게
+        let stage = 0; // 현재 사용자가 게임중인 스테이지 레벨 값 0,1,2
+        let hpBox;
+        let hpArray = [];
+        let flag = false;
+        let hpRowIndex = 0; // hp 배열의 층 수 접근
+        let hpColIndex = 0; // hp 호수 접근
+        let bt;
+        let level; // 게임의 스테이지를 결정짓는 변수
+        let bgArray = ["베네1.jpg","베네2.jpg","베네3.jpg"];
+
+        // 이 배열을 통해 우리는 span을 각각 제어할 수 있다.
+        //배열에 들어있는 텍스트 정보를, 실제 움직이는 span화 시켜
+        // 제어할 수 있도록 화면에 등장시키기
+        
+        function createWord(){
+            for(let i = 0; i < word[stage].length; i++){
+                stage = parseInt(level.value);
+
+                let span = document.createElement('span');
+                span.innerText = word[stage][i];
+                span.style.position = "absolute";
+                span.style.left = (i*100) + "px";
+                span.style.top = getRandomByRange(-100,101) + "px";
+    
+                //content에 부착
+                content.appendChild(span);
+                spanArray.push(span);
+            }
+        }
+        // 텍스트 박스에 입력한 값과 화면에 등장한 모든 단어와 서로 일치
+        // 하는지 여부를 따져보고 일치하면 화면에서 단어 제거하고 점수 증가
+        function enterKey(){
+            let keyword = document.getElementById('keyword');
+            
+            if(event.keyCode ==13){
+                for(let i = 0; i < spanArray.length; i++){
+                    if(spanArray[i].innerText == keyword.value){
+                        console.log('일치하는 것 발견',i);
+                        //화면에서 해당 span 제거
+                        content.removeChild(spanArray[i]);
+                        //spanArray 배열에서도 제거해야 함
+                        //splice(몇 번째, 몇 개);
+                        spanArray.splice(i, 1);
+                    }
+    
+                }
+
+            }
+
+
+        }
+        function down(){
+            for(let i = 0; i < spanArray.length; i++){
+
+
+
+                //단어의 위치를 내려오게
+                spanArray[i].style.top = parseInt(spanArray[i].style.top) + velY + "px";
+            }
+
+        }
+        // hp를 표현하는 9개의 사각형을 생성하여, hpBox에 부착
+        function createHp(){
+            
+            for(let a = 0; a < 3; a++){
+
+                let arr = [];
+                for(let i = 0; i < 3; i++){
+    
+                    let hp = document.createElement('div');
+                    hp.style.width = 60 + 'px';
+                    hp.style.height = 60 + 'px';
+                    hp.style.background = "red";
+                    hp.style.position = "absolute";
+                    hp.style.left = 10 + (61*i) + "px";
+                    hp.style.top = 10 + (61*a) + "px";
+        
+                    hpBox.appendChild(hp);
+                    arr.push(hp);
+                }   hpArray.push(arr);
+            }
+
+        }
+        //화면에 남아있는 단어를 대상으로 데드라인을 넘어섰는지 판단하여
+        // 넘어 선 경우는 hp를 하나 감소. 단어도 사라지게(시각적효과, 배열에서도 제거)
+        function checkDeadLine(){
+            //게임오버 체크
+            if(hpRowIndex >= 2 && hpColIndex >= 2){
+                flag = false;
+                alert('게임 오버');
+            }
+            for(let i = 0; i < spanArray.length; i++){
+                if(parseInt(spanArray[i].style.top) >= 500){
+                    //시각적으로 화면에서 제거
+                    content.removeChild(spanArray[i]); 
+
+                    //배열에서도 제거
+                    spanArray.splice(i, 1);
+
+                    //hp도 제거
+                    hpArray[hpRowIndex][hpColIndex].style.background = "yellow";
+                    hpColIndex++;
+                    if(hpColIndex > 2){
+                        hpRowIndex++;
+                        hpColIndex = 0;
+                    }
+                }
+            }
+        }
+
+        //사용자가 선택한 레벨로 게임을 시작함
+        function startGame(){
+
+            for(let i = 0; i < spanArray.length; i++){
+
+                //기존에 있는 단어들을 모두 제거
+                content.removeChild(spanArray[i]);
+                //배열 제거
+            }
+            spanArray = [];
+
+
+            createWord(); // 텍스트 생성하기
+        }
+
+
+        //단어들이 일정시간 간격을 두고, 점점 내려오는 효과
+        function gameLoop(){
+            if(flag){
+
+                //데드라인 넘어섰는지 판단..
+                checkDeadLine();
+                down();
+            }
+
+        }
+
+        function setBg(index){
+           
+            content.style.backgroundImage = "url(../images/" + bgArray[index] + ")";
+            content.style.backgroundSize = "1000px 900px";
+        }
+
+        addEventListener('load', function(){
+            content = document.getElementById('content');
+            hpBox = document.getElementById('hp-box');
+            bt = document.getElementById('bt');
+            level = document.getElementById('level');
+            // content.style.backgroundImage = "url(../images/" + bgArray[0] + ")";
+            bt.addEventListener('click', function(){
+                flag = !flag;
+                if(flag){
+                    this.innerText = "Pause";
+                }else{
+                    this.innerText = "Play";
+                }
+            });
+
+
+          
+            createHp(); // hp 생성
+            setBg(); // 배경 이미지 설정
+            //무언가 움직임이 있는 프로그램에서는 loop가 존재해야한다
+            setInterval("gameLoop()", 100);
+        });
+
+    </script>
+</head>
+<body>
+    
+    <div id = 'wrapper'>
+        <div id = 'control'>
+            <input type="text" id = 'keyword' onkeyup = "enterKey()">
+            <div id = "hp-box"></div>
+            <button id = "bt">Play</button>
+            <button onClick = "startGame()">게임시작</button>
+            <select id = "level" onChange = "setBg(this.value)">
+                <option value = "0">레벨1</option>
+                <option value = "1">레벨2</option>
+                <option value = "2">레벨3</option>
+            </select>
+        </div>
+        <div id = 'content'></div>
+    </div>
+
+
+
+
+
+
+</body>
+</html>

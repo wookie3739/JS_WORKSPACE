@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        //현재 문서에 있는 동전이미지를 반대이미지로 교체
+        let flag = true;
+
+        function flip(){
+            //기존의 논리값을 반대로 뒤집기
+            flag = !flag;
+            console.log("flag ", flag);
+            let coin = document.getElementById("coin");
+            let path = (flag)? "coin_front":"coin_back";
+            coin.src = "../images/" + path + ".jpg";
+
+        }
+
+    </script>
+</head>
+<body>
+    
+<button onClick="flip()">뒤집기 실행</button>
+<p></p>
+<img id="coin" src = "../images/coin_front.jpg">
+
+
+
+
+</body>
+</html>

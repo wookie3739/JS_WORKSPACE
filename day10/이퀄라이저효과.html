@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../lib/common.js"></script>
+    <script>
+        //프로그램이 가동되면, wrapper을 동적으로 만들고, 그wrapper에 들어갈
+        //이퀄라이저 막대들을 동적으로 생성하여 부착하자..
+        //부착한 이후부터 막대들은 height가 실시간으로 변경되어야 한다.
+        let wrapper;
+        let barCount=100; //몇개의 막대를 만들지 결정짓는 변수
+        let barWidth = 20; //막대 한개의 너비
+        let barHeight = 500; // 막대 한개의 높이
+        let barArray=[]; // 생성되는 모든 막대를 보관할 배열
+        //막대를 표현한다.(현실의 막대하나 정의)
+        class Bar{
+            //변수(property:상태, 속성을 표현),함수(메서드 method)
+            constructor(x, y, width, height, bg, a, targetH){
+                this.x =x;
+                this.y=y;
+                this.width = width;
+                this.height = height;
+                this.bg = bg;
+                this.a= a; // 0.1-0.9
+                this.targetH = targetH ; //이 막대의 목표높이
+                this.div = document.createElement("div");
+                this.div.style.position="absolute";
+                this.div.style.left= this.x+ "px";
+                this.div.style.top= this.y+ "px";
+                this.div.style.width= this.width + "px";
+                this.div.style.height= this.height + "px";
+                this.div.style.background=  this.bg; //"rgb(0,0,0)" 
+                
+                //wrapper에 부착
+                wrapper.appendChild(this.div);
+            }
+            // 막대의 높이 조절 동작 정의
+            move(){
+                //나의 높이 = 나의높이 + a *(목표높이 - 나의높이)
+                this.div.style.height= parseFloat(this.div.style.height) + this.a*(this.targetH - parseFloat(this.div.style.height))+"px";
+                this.div.innerText = parseInt(this.div.style.height);
+            }
+        }
+        function createBar(){
+            for(let i=0; i<barCount ; i++){
+                // constructor(x, y, width, height, bg, a, targetH)
+                let barHeight=getRandomByRange(10,501);
+                let color = "rgb("+getRandom(256)+","+getRandom(256)+","+getRandom(256)+")";
+                let a = getRandomByRange(0.1, 1)
+                let targetH= getRandomByRange(30,501);
+                let bar= new Bar(barWidth*i, 0, barWidth, barHeight, color, a, targetH);
+                barArray.push(bar);
+            }
+        }
+        //모든 바를 대상으로 move() 계속 호출
+        function gameLoop(){
+            for(let i=0; i< barArray.length; i++){
+                barArray[i].move();
+            }
+        }
+        function setTarget(){
+            for(let i = 0; i < barArray.length; i++){
+                barArray[i].targetH = getRandomByRange(10,501);
+            }
+        }
+        addEventListener("load", function(){
+            wrapper = document.createElement("div");
+            wrapper.style.width = (barWidth* barCount) + "px"; //막대너비 * 막대갯수
+            wrapper.style.height = barHeight + "px"; //막대높이
+            wrapper.style.background="gray";
+            wrapper.style.margin = "auto";
+            wrapper.style.position="relative";
+            document.body.appendChild(wrapper);
+            createBar();
+            setInterval("gameLoop()", 10);
+            setInterval('setTarget()', 100);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let n = 0;
+        function setCount(){
+            n++;
+            console.log("n=", n);
+            if(n > 18){
+                n = 1;
+            }
+            //문서 내의 캐릭터의 src를 변경
+            let pic = document.getElementById("pic");
+            pic.src = "../images/hero/image" + n + ".png";
+            // pic.src = `../images/hero/image${n}.png`;
+
+        }
+        // 사람 대신, setCount() 함수를 일정 시간 간격으로 계속 호출하게 함
+        function auto(){
+            setInterval("setCount()",100);
+        }
+
+    </script>
+</head>
+<body>
+    
+    <button onClick = "setCount()">수동펄럭임</button>
+    <button onClick = "auto()">자동펄럭임</button>
+    <p>
+    <img id = "pic" src = "../images/hero/image1.png">
+
+
+
+</body>
+</html>

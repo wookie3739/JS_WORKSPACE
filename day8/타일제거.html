@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1000px;
+            height:1000px;
+            background-image: url('../images/food/banana.png');
+            position: relative;
+            margin : 0 auto;
+        }
+    </style>
+    <script>
+        let doubleArray = [];
+        let flag = false;
+        function init(){
+            let wrapper = document.getElementById('wrapper');
+            
+            for(let a = 0; a < 20; a++){
+                
+                let arr = [];
+                for(let i = 0; i < 20; i++){
+                    
+                let div = document.createElement('div');
+                div.style.width = 50 + 'px';
+                div.style.height = 50 + 'px';
+                div.style.background = 'red';
+                wrapper.appendChild(div);
+                div.style.border = '1px solid black';
+                div.style.boxSizing = 'border-box';
+                div.style.float = 'left';
+                arr.push(div);
+                div.addEventListener('click', function(){
+                    this.style.opacity = '0';
+                
+                });
+
+            }    doubleArray.push(arr);
+        }  
+            
+
+        }
+
+        function showPic(){
+            //그림보기
+            for(let a = 0; a < doubleArray.length; a++){
+                for(let i = 0; i < doubleArray[a].length; i++){
+                    if(flag){
+                        
+                        doubleArray[a][i].style.opacity = '1';
+                    }else{
+                        doubleArray[a][i].style.opacity = '0'; // 보이게
+                    }
+                }
+                
+            }
+            flag = !flag;
+    }
+        function clear(){
+
+        }
+
+        addEventListener('load', function(){
+            init();
+        });
+
+
+
+
+    </script>
+</head>
+<body>
+    <button onClick = 'showPic()'>그림보기</button>
+    <button onClick = 'clear()'>초기화</button>
+<div id = 'wrapper'>
+
+
+</div>
+
+
+</body>
+</html>

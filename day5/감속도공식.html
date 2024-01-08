@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin:0;
+        }
+        #wrapper{
+            width:100%;
+            height:900px;
+            background-color: yellow;
+        }
+        #wrapper img{
+            width:100px;
+        }
+    </style>
+    <script>
+        let a = 0.1;
+        let pic;
+        let targetX = 0; // 사용자가 제일 마지막에 기록한 x좌표
+        let targetY = 0; // 사용자가 제일 마지막에 기록한 y좌표
+    
+        //마우스의 좌표 구하기
+        function move(){
+
+            //감속도 공식으로 움직여보기
+            // 내 위치 = 현재 나의 위치 + a*(목표 위치 - 현재 나의 위치);
+            //여기서 a는 0에 수렴할 수록 더 부드럽다.
+            pic.style.left = parseInt(pic.style.left) + a*(targetX - parseInt(pic.style.left))+"px";
+            pic.style.top = parseInt(pic.style.top)+ a*(targetY - parseInt(pic.style.top)) + "px";
+            // console.log(pic.style.left, pic.style.top);
+        }
+        //초기화 중요!!
+        function init(){
+            //캐릭터의 좌표를 마우스 좌표와 일치시키기
+            pic = document.getElementById('pic');
+            pic.style.position = "absolute";
+            pic.style.left = 0 +"px";
+            pic.style.top = 0 + 'px';
+        }
+        addEventListener('load', function(){
+            init();
+            setInterval('move()', 10);
+        });
+        function getPos(){
+            targetX = event.clientX;
+            targetY = event.clientY;
+        }
+    </script>
+</head>
+<body onMousedown ='getPos()'>
+    <div id = 'wrapper'>
+    <img id = 'pic' src = '../images/피카츄.png'>
+</div>
+</body>
+</html>

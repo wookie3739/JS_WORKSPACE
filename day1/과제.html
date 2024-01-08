@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        section{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+        }
+        #wrap{
+            width:400px;
+            height:400px;
+        }
+        #wrap img {
+            height:350px;
+        }
+        .btn{
+            display:flex;
+            justify-content: space-around;
+        }
+        .btn button{
+            padding:10px 20px;
+            font-size: 20px;
+        }
+        .btn div{
+            line-height:50px;
+        }
+
+    </style>
+
+
+</head>
+<body>
+    
+
+<section>
+    <div id = "wrap">
+        
+        <img id="img" src="../images/Ninja/Attack__000.png의 사본.png">
+        
+        <div class="btn">
+            <button onClick="prev()">prev</button>
+            <div class="text">Attack__000.png의 사본.png</div>
+            <button onClick="next()">next</button>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    const text = document.querySelector('.btn .text');
+    let n = 0;
+    function foo() {
+        let img = document.getElementById("img");
+        img.src = `../images/Ninja/Attack__00${n}.png의 사본.png`;
+    } 
+    function prev(){
+        if(n >= 1){
+            n -= 1;
+            foo();
+            text.innerHTML = `Attack__00${n}.png의 사본.png`;
+        }   return;
+    }
+    function next(){
+        if(n < 9){
+            n += 1;
+            foo();
+            text.innerHTML = `Attack__00${n}.png의 사본.png`;
+        }   return;
+}   
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

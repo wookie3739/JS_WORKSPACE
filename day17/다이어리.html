@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src = "./Cell.js"></script>
+    <script src="../lib/common.js"></script>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        #wrapper{
+            width:1310px;
+            height:900px;
+            margin: 0 auto;
+            background-color: yellow;
+        }
+        #wrapper #leftSide{
+            width:200px;
+            height:900px;
+            float:left;
+            border: 1px solid black;
+        }
+        
+        #center{
+            width:900px;
+            height:900px;
+            float:left;
+            border: 1px solid black;
+            margin-left: 5px;
+            overflow: hidden;
+        }
+        #center #header{
+            width:100%;
+            height:50px;
+            border-bottom: 1px solid black;
+        }
+        #center #content{
+            width:100%;
+            height:850px;
+            position:relative;
+            left: -900px;
+            background-color: red;
+        }
+        #rightSide{
+            width:200px;
+            height:900px;
+            float:left;
+            border:1px solid black;
+            margin-left: 5px;
+        }
+        select{
+            width:96%;
+            height:30px;
+            font-size: 20px;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        textarea{
+            width:96%;
+            height:150px;
+            font-size: 20px;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        #preview{
+            width:96%;
+            height:150px;
+            border:2px solid red;
+            margin-top: 5px;
+        }
+        #leftSide button{
+            width:96%;
+            height:30px;
+            font-size:20px;
+            margin-top: 10px;
+        }
+        #header{
+            width:100%;
+            height:50px;
+            text-align: center;
+            line-height: 50px;
+            font-size:35px;
+        }
+        #header button{
+            font-size: 20px;
+        }
+    </style>
+    <script>
+        let content; // 달력의 셀들을 붙일 영역
+        let titleArray = ["Sun","Mon","Tues","Wed","Thu","Fri","Sat"];
+        let iconSrcArray = [
+            "../images/pin1.png",
+            "../images/pin2.png",
+            "../images/pin3.png"
+        ];
+        let dateArray = [];
+        let currentDate; // 현재 날짜 정보
+        let cellArray = [];
+        let selectedRadioIndex; // 현재 선택되어진 라디오 박스의 인덱스
+        let diaryArray = []; // 등록 정보 쌓아놓기(JSON 누적 할 예정)
+
+        function initDate(){
+            let tag = "";
+            tag += "<option>연도선택</option>"
+            for(let i = 2030; i >= 2020; i--){
+                
+                tag += "<option>"+i+"</option>";
+            }
+
+            $("select[name='yy']").html(tag); // innerHTML
+
+            //월
+            tag = "";
+            tag += "<option>월 선택</option>"
+            for(let i = 1; i <=12; i++){
+                
+                tag += "<option>"+i+"</option>";
+            }
+            $("select[name='mm']").html(tag);
+
+            //일
+            tag = "";
+            tag += "<option>일 선택</option>"
+            for(let i = 1; i <=31; i++){
+                
+                tag += "<option>"+i+"</option>";
+            }
+            $("select[name='dd']").html(tag);
+        }
+
+        function createDay(){
+            for(let i = 0; i < titleArray.length; i++){
+                let t = new Cell(content, i*130,0,130,50,titleArray[i],"lightgray");
+                // container, x, y, width, height, text, bg
+            }
+        }
+
+        function createDate(){
+            // let count = 0;
+            for(let i = 0; i < 6; i++){
+                let arr = [];
+                for(let a = 0; a < titleArray.length; a++){
+                    let cell = new Cell(content, a*130, 50 +(i*135),130,135,"","aqua");
+                    arr.push(cell);
+                }
+                dateArray.push(arr);
+            }
+        }
+        //이미 생성 된 셀들 위에 날짜를 출력하기 위한 함수
+        function printNum(){
+            let n = 0; // 박스의 순번을 매기기 위한 변수
+            let d = 0; // 실제 날짜를 담기 위한 변수
+            for(let a = 0; a < dateArray.length; a++){
+                for(let i = 0; i < dateArray[a].length; i++){
+                    let str = "";
+                    if(n >= getStartDayOfWeek() && d <= getStartDateOfMonth() -1){
+
+                        d++;
+                        str = d;
+                    }
+                    dateArray[a][i].text=str;
+                    $(dateArray[a][i].div).text(str);
+                    n++;
+                }
+            }
+        }
+        // 다이어리를 표시하기 전에 기존의 셀들을 한 번 초기화하자
+        // cell은 42개로 재사용중이므로
+        function cleanCell(){
+            for(let a = 0; a < dateArray.length; a++){
+                for(let i = 0; i < dateArray[a].length; i++){
+                    // $(dateArray[a][i].div).css("background", "aqua");
+                    // div에 있는 모든 자식요소 삭제
+                    $(dateArray[a][i].div).empty();
+                }
+            }
+        }
+        //생성된 각 셀에 표현 된 날짜와, 현재까지 누적된 데이터베이스와의 비교를 통하여,
+        //만일 yy,mm,dd가 동일하다면
+        //해당 json을 해당셀에 출력 표시
+        function mark(){
+            for(let a = 0; a < dateArray.length; a++){
+                for(let i = 0; i < dateArray[a].length; i++){
+                    //JSON 배열의 수만큼
+                    for(let k = 0; k < diaryArray.length; k++){
+                        let json = diaryArray[k];
+                        if(json.yy === currentDate.getFullYear() &&
+                        json.mm === currentDate.getMonth() &&
+                        json.dd === parseInt(dateArray[a][i].text)){
+                            // $(dateArray[a][i].div).css("background", "gray");
+                            //핀에 해당하는 이미지 생성하여 부착
+                            let pin = document.createElement('img');
+                            pin.src = json.icon;
+                            pin.style.width = 35 + "px";
+                            dateArray[a][i].div.innerText += json.memo;
+                            dateArray[a][i].div.appendChild(pin);
+
+                        }
+                    }
+                }
+            }
+        }
+
+        function next(){
+            let yy = currentDate.getFullYear();
+            let mm = currentDate.getMonth();
+
+            currentDate.setFullYear(yy);
+            currentDate.setMonth(mm + 1);
+
+            //정보 조작이 끝났으면 제목을 출력하자
+            printTitle();
+            printNum();
+            ani();
+            initSelect();
+            mark(); // 달력에 다이어리 기록 표시
+        }
+        function prev(){
+            let yy = currentDate.getFullYear();
+            let mm = currentDate.getMonth();
+
+            currentDate.setFullYear(yy);
+            currentDate.setMonth(mm - 1);
+            printTitle();
+            printNum();
+            ani();
+            initSelect();
+            mark();
+        }
+        function ani(){
+            // -900으로 돌려놓고 애니메이션 시작
+            $("#content").css("left", "-900px");
+            $("#content").animate({
+                left: "0px"
+            });
+        }
+        function printTitle(){
+            let yy = currentDate.getFullYear(); // 현재 보고있는 달력의 연도
+            let mm = currentDate.getMonth(); // 현재 보고있는 달력의 월
+            $("#title").text(yy +"년 " + getNumString(mm + 1) + "월");
+        }
+        //1) 각 월은 무슨 요일부터 시작하는가?
+        function getStartDayOfWeek(){
+            let d = new Date(); // 조작용 객체
+            let yy = currentDate.getFullYear();
+            let mm = currentDate.getMonth();
+
+            d.setFullYear(yy);
+            d.setMonth(mm); // 출력용이 아니니 +1 할 필요 없음.
+
+            d.setDate(1); // 1일로 조작(시작 요일 물어보려고)
+            return d.getDay(); // 현재 요일 반환;
+
+        }
+
+        //2) 각 월은 며칠까지 있는가?
+        function getStartDateOfMonth(){
+            let d = new Date(); // 조작용 객체
+            let yy = currentDate.getFullYear();
+            let mm = currentDate.getMonth();
+
+            d.setFullYear(yy);
+            d.setMonth(mm + 1); // 다음 달로 조작
+
+            d.setDate(0); // 1일로 조작(시작 요일 물어보려고)
+            return d.getDate(); // 너 며칠이니?
+        }
+        //월이 변경될 때마다 좌측의 select 박스를 동기화
+        function initSelect(){
+            $("select[name = 'yy']").val(currentDate.getFullYear()); // 연도 설정
+            $("select[name = 'mm']").val(currentDate.getMonth()+1); // 월 설정
+            
+        }
+        function callMonth(){
+            let yy = $("select[name = 'yy']").val();
+            let mm = $("select[name = 'mm']").val() - 1;
+
+            currentDate.setFullYear(yy);
+            currentDate.setMonth(mm);
+
+            printTitle();
+            printNum();
+            ani();
+        }
+        //다이어리 한 건 마다 JSON으로 보관하여 다시 배열에 담아놓자
+        function regist(){
+            let json = {
+                yy:currentDate.getFullYear(),
+                mm:currentDate.getMonth(),
+                dd:parseInt($("select[name = 'dd']").val()),
+                memo:$("textarea[name = 'memo']").val(),
+                icon: iconSrcArray[selectedRadioIndex]
+            };
+            diaryArray.push(json);
+            console.log(json);
+            cleanCell();
+            printNum();
+            mark();
+        }
+        $(function(){
+            content = document.getElementById('content');
+            //좌측에 위치했던 content를 목표지점까지 이동
+            ani();
+            initDate();
+            // createIcon();
+            //라디오 박스에 이벤트 연결하기
+            let iconArray = $("input[name = 'icon']");
+            for(let i = 0; i < iconArray.length; i++){
+                $(iconArray[i]).click(function (){
+                    //선택한 라디오의 인덱스와 일치하는 이미지 경로를 얻어서
+                    // preview의 src에 대입
+                    selectedRadioIndex = i; // 인덱스 보관해놓기
+                    $("#preview").attr("src", iconSrcArray[i]);
+                });
+            }
+            currentDate = new Date(); // 현재 날짜 객체 생성
+            printTitle();
+            createDay(); // 요일 박스 생성
+            
+            createDate(); // 날짜 박스 생성
+            printNum();
+            initSelect();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id = "leftSide">
+            <select name="yy" id=""></select>
+            <select name="mm" onChange = "callMonth()" id=""></select>
+            <select name="dd" id=""></select>
+            <textarea name = "memo"></textarea>
+            <div>
+                핀1<input type="radio" name="icon" id="">
+                핀2<input type="radio" name="icon" id="">
+                핀3<input type="radio" name="icon" id="">
+            </div>
+            <img id = "preview">
+            <button onclick="regist()">등록</button>
+        </div>
+        <div id = "center">
+            <div id = "header">
+                <button onClick = "prev()">←</button>
+                <span id = "title">2002년 12월</span>
+                <button onClick = "next()">→</button>
+            </div>
+            <div id = "content">달력 내용</div>
+        </div>
+        <div id = "rightSide">우측 영역</div>
+    </div>
+</body>
+</html>

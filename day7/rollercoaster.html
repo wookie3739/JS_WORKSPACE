@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+        }
+        #wrapper{
+            width: 1000px;
+            height: 900px;
+            /* margin: auto; */
+            /* background-color: yellow; */
+        }
+        #content {
+            width: 800px;
+            height: 100%;
+            background-color: aqua;
+            float: left;
+            background-image: url(../images/rollercoaster.png);
+            background-size: 800px 100%;
+            position:relative;
+        }
+        #info {
+            width: 200px;
+            height: 100%;
+            /* background-color: black; */
+            float: left;
+            overflow: scroll;
+        }
+    </style>
+    <script>
+        let content;
+        let info;
+        let log = new Array(); // 점들을 모아놓을 배열
+        let mario;
+        let flag = false;
+        let f = 0;
+        //사용자가 클릭한 위치의 좌표(x,y)를 구하여
+        // 누적해놓자.
+        function createPoint(){
+            let x = event.layerX;
+            let y = event.layerY;
+            console.log(x,y);
+            let dot = [x,y]; // 1차원 배열 생성
+            log.push(dot);
+
+            // 1*1짜리 div를 점으로 표현
+            let rect = document.createElement('div');
+            rect.style.width = 3+'px';
+            rect.style.height = 3+'px';
+            rect.style.background = 'red';
+            rect.style.position = 'absolute';
+            rect.style.left = dot[0] + 'px';
+            rect.style.top = dot[1] + 'px';
+            //content에 부착
+            content.appendChild(rect);
+            printInfo();
+
+
+        }
+        //좌표 정보 출력
+        function printInfo(){
+            //정보가 누적된 이차원배열에서 좌표정보를 꺼내어
+            // 출력한다.
+            info.innerText ='';
+            for(let i = 0; i < log.length; i++){
+                let pos = log[i]; // 일차원배열 꺼내기
+                info.innerText += 'x =' + pos[0] + ' y = ' + pos[1] + '\n';
+            }
+        }
+
+        function createMario(){
+            mario = document.createElement('img');
+            mario.src = '../images/cream.png';
+            mario.style.width = 45 + 'px';
+            mario.style.position = 'absolute';
+            mario.style.left = 0 +'px';
+            mario.style.top = 0 + 'px';
+            content.appendChild(mario);
+
+        }
+        //주인공을 끊임없이 움직일 수 있도록 호출
+        function gameLoop(){
+            if(flag){ // 논리값
+                // console.log('움직일래요');
+                mario.style.left = log[f][0]+'px';
+                mario.style.top = log[f][1]+'px';
+                if(f < log.length-1){
+                    f++;
+            }
+        }
+    }
+        function start(){
+            flag = !flag;
+        }
+    addEventListener('load', function(){
+        content = document.getElementById('content');
+        info = document.getElementById('info');
+        createMario(); // 주인공 등장시키기
+        setInterval('gameLoop()', 100);
+});
+
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="content" onMouseDown="createPoint()"></div>
+        <div id="info"></div>
+    </div>
+    <button onClick="start()">시작</button>
+</body>
+</html>

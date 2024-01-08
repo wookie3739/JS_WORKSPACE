@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let img;
+        let x = 0;
+        let opp = 1;
+        //이미지의 x축 좌표값을 변경하는 함수 정의
+        // 문제 : x축 left값이 700이되면 반대로 움직이고 0이되면 다시 시작.
+        function move(){
+            
+            if(x<700){
+                x = 5 * (x * opp);   // 5씩 증가
+            }else if(x === 700){
+                opp = -opp;
+            }
+            
+            img.style.left = x + "px";
+
+            
+        }
+        
+        addEventListener('load', function(){
+            img = document.createElement('img');
+            img.src = "../images/hero/image1.png";
+            img.style.position ="absolute";
+            img.style.left = 0+"px";
+            img.style.top = 150+"px";
+            document.body.appendChild(img);
+        });
+    </script>
+</head>
+<body>
+    <button onClick = "move()">시작</button>
+</body>
+</html>

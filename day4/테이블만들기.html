@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <!-- html에서도 테이블을 지원하는데
+    이 때 코드 작성시, 개발자는 건물을 염두해두고 비교해가면서
+공부하면 쉬워짐 -->
+
+<!-- <table id = "table" border="20px" width="500px"> -->
+    <!-- <tr id = "floor">
+        <td>201호</td>
+        <td>202호</td>
+    </tr>
+    <tr>
+        <td>101호</td>
+        <td>102호</td>
+    </tr> -->
+
+<!-- </table> -->
+
+
+
+
+<script>
+    // document.write("\"야 빨리와\" 밥 먹어야지");
+    // document.write("<img src = \"../images/gallerxy/blue_king.png\"");
+    
+    let table = document.createElement('table');
+    for(let i = 100; i >= 0; i++){
+        let tr = document.createElement('tr');
+        
+        for(j = 0; j<=1; j++){
+            let td = document.createElement('td');
+            td.innerHTML = i+"02호";
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    document.body.appendChild(table);
+    table.style.border="20px solid red";
+    table.style.width="250px";
+    table.style.textAlign="center";
+
+
+
+
+
+</script>
+</body>
+</html>

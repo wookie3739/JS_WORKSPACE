@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1000px;
+            height:800px;
+            margin: 0 auto;
+            background-color: aqua;
+            position: relative;
+        }
+    </style>
+    <script>
+        //2차원 구조의 맵을 2차원 배열로 표현해본다
+        // 0이면 빈공간, 1이면 벽돌, 2이면 물음표, 3이면 버섯
+        // 4 주인공 5 별
+       let map = [
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,1,2,3,4,5,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+
+        let div;
+        let wrapper;
+        function createBrick(){
+            
+            
+            for(let a =0; a < map.length; a++){
+                   //가로 세로 50인 div에 벽돌이미지를 입혀서 한 줄을 출력
+                for(let i = 0; i < map[a].length; i++){
+                
+
+                //0이 아닐 때만 물체를 생성
+                if(map[a][i]!=0){
+
+                    div = document.createElement('div');
+                    div.style.width = 50 + "px";
+                    div.style.height = 50 + "px";
+                    let fileName= "";
+                    switch(map[a][i]){
+                        case 1: fileName = "brick.png";break;
+                        case 2: fileName = "question.jpg";break;
+                        case 3: fileName = "mushroom.jpg";break;
+                        case 4: fileName = "피카츄.png";break;
+                        case 5: fileName = "star.jpg";break;
+                    }
+                    div.style.backgroundImage = "url(../images/supermario/"+fileName+")";
+                    div.style.backgroundSize = "50px 50px";
+                    div.style.position = "absolute";
+                    div.style.left = (50*i) + "px";
+                    div.style.top = (50*a) + "px";
+                    wrapper.appendChild(div);
+                    
+                    }
+                }
+            }
+            
+            
+            
+            
+         
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+        
+        
+        addEventListener('load', function(){
+            
+            wrapper = document.getElementById('wrapper');
+            wrapper.style.backgroundImage = "url(../images/베네1.jpg)";
+            wrapper.style.backgroundSize = "1000px 800px";
+            createBrick(); // 벽돌 생성
+            
+            
+
+        });
+
+
+
+    </script>
+</head>
+<body>
+    <div id = "wrapper"></div>
+
+
+
+
+
+
+
+</body>
+</html>

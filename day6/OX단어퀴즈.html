@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:450px;
+            height:500px;
+            margin:0 auto;
+
+        }
+        #quiz{
+            width:100%;
+            height:200px;
+            background-color: red;
+            font-size: 100px;
+            text-align: center;
+            line-height: 200px;
+        }
+        #key{
+            width:100%;
+            height:100px;
+            /* background-color: orange; */
+        }
+        #key input{
+            width: 98%;
+            height:98%;
+            font-size: 50px;
+        }
+        #feedback{
+            width:100%;
+            height:150px;
+            background-color: purple;
+            font-size: 100px;
+            text-align: center;
+            /* line-height: 200px; */
+        }
+        #result{
+            width:100%;
+            height:50px;
+            background-color: green;
+            font-size: 40px;
+            text-align: center;
+        }
+
+    </style>
+    <script>
+
+        //게임에 사용할 단어를 메모리에 올리자
+        let word = ["볶음밥","오리고기","삼겹살","우동","라면","다금바리"];
+        let n = 0;
+        let keyword;
+        let quiz;
+        let feedback;
+        let result;
+        let score = 0;
+
+        //점수 처리
+        function setScore(){
+            result.innerHTML = score + '점';
+        }
+
+        function init(){
+            keyword = document.getElementById('keyword');
+            quiz = document.getElementById('quiz');
+            feedback = document.getElementById('feedback');
+            result = document.getElementById('result');
+
+            quiz.innerHTML = word[0];
+            //keyword 위에 커서 올리기
+            keyword.focus();
+            //점수 출력
+            setScore();
+            keyword.addEventListener('keyup', function(){
+                if(event.keyCode === 13){
+                    
+                    next();
+                }
+            });
+        }
+        function next(){
+                if(keyword.value === quiz.innerHTML){
+
+                    quiz.innerHTML = word[++n];
+                    //입력한 텍스트는 다시 초기화
+                    keyword.value = '';
+
+                    //O,X 여부 출력
+                    feedback.innerHTML = 'O';
+                    //점수 누적
+                    score += 10;
+                    setScore();
+                }else{
+                    feedback.innerHTML = 'X';
+                    score = 0;
+                    setScore();
+                    
+                }
+
+            // alert(event.keyCode);
+        }
+
+        addEventListener('load', function(){
+            init();
+        })
+    </script>
+</head>
+<body>
+    
+    <div id = 'wrapper'>
+        <div id = 'quiz'>알아맞힐 단어</div>
+        <div id = 'key'>
+            <input type="text" name="" id="keyword">
+        </div>
+        <div id = 'feedback'></div>
+        <div id = 'result'>0</div>
+    </div>
+
+
+</body>
+</html>

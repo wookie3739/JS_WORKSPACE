@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        addEventListener('load', function(){
+            document.getElementById('king');
+            king.addEventListener('click', function(){
+                let ch = document.getElementsByName('ch');
+                for(let i = 0; i < ch.length; i++){
+
+                    ch[i].checked = king.checked;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h3>
+        전체선택: <input type="checkbox" name="" id="king">
+    </h3>
+    <!-- name을 이용하면 태그요소들은 실행타임에 js의 배열로 생성됨(자동) -->
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+    <input type="checkbox" name="ch" id=""><br>
+</body>
+</html>

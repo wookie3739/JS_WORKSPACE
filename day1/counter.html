@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        p{
+            font-size: 100px;
+            font-weight:bold;
+            color:red;
+        }
+    </style>
+    <script>
+        //카운터 숫자를 누적하기 위해, 전역변수로 선언
+        let count = 0; // 웹 브라우저와 생명을 함께한다.
+        
+        //이 함수를 호출할 때마다, count 전역변수
+        // 1씩 증가
+        function setCount(){
+            count++;
+            //변수의 값을 일반사용자들이 보도록 디자인에 시각화시킨다.
+            document.querySelector('p').innerText = count;
+        }
+
+    </script>
+</head>
+<body>
+    
+<button onClick="setCount()">카운터 시작</button>
+
+<p>0</p>
+
+
+
+
+
+</body>
+</html>

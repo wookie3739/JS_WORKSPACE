@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        button{
+            padding:30px;
+        }
+
+    </style>
+</head>
+<body>
+    
+
+<button>나버튼</button>
+
+
+
+
+<script>
+    //문서가 로드되면 버튼을 접근한다. 최상위 객체에서는 window를 걸어야함
+    window.addEventListener("load", function(){
+        console.log("문서가 로드되었어");
+        //버튼을 클릭하면 왕버튼으로
+        document.querySelector("button").addEventListener('click', function(){
+            document.querySelector("button").innerHTML = "왕버튼";
+        });
+    })
+    // document.querySelector('button').addEventListener('click', () => {
+    //     test();
+    // });
+    // function test(){
+    //     // let hasbox;
+    //     const btn = document.querySelector('button');
+    //     btn.innerText = "왕버튼";
+    //     // hasbox = event.target;
+    //     // hasbox.innerHTML = "왕버튼";
+    // }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin:0;
+        }
+        #wrapper{
+            width:1000px;
+            height:1000px;
+            background-color: yellow;
+        }
+    </style>
+    <script>
+        let wrapper;
+        const w = 4;
+        const h = 4;
+        let countX = 150;
+        let countY = 150;
+        let rectArray = []; // 모든 사각형 div를 담고있을 배열
+        let log = []; // size가 0인 배열 선언
+        //그림판의 셀 역할을 할 div를 대량으로 만들기
+        function createCell(){
+            for(let a = 0; a<countY; a++){
+
+                for(let i = 0; i < countX; i++){
+                    let rect = document.createElement('div');
+
+                    rect.style.width = w + 'px';
+                    rect.style.height = h + 'px';
+                    rect.style.position = 'absolute';
+                    rect.style.left = (w*i) + 'px';
+                    rect.style.top = (h*a) + 'px';
+                    rect.style.background = 'red';
+                    wrapper.appendChild(rect);
+                    rect.addEventListener('mousemove', function(){
+                        this.style.background = 'white';
+                        console.log('좌표는', w*i, h*a);
+                        //좌표를 이차원배열에 누적
+                        log.push([i,a]);
+                        //생성된 사각형들을 전역변수에 배열로 보관
+                        rectArray.push(rect);
+                    });
+                }
+            }
+        }
+        function initPaint(){
+            // for(){
+            //     for(){
+
+            //     }
+            // }
+        }
+        //이차원 배열인 log에 쌓여져 있는 모든 일차원배열
+        // 꺼내서 해당 좌표 rect의 색 변경
+        function replay(){
+            //그림의 초기화(모두 다시 빨간색으로)
+            for(let i = 0; i<countX*countY; i++){
+                rectArray[i].style.background = 'red';
+            }
+            //그림 복원하기
+            //로그에 저장된 배열의 인덱스들을 추적하여
+            // 해당 인덱스의 rect의 배경색을 노란색으로
+            for(let i = 0; i < log.length; i++){
+                let pos = log[i];
+                //여기까지.
+            }
+        }
+
+        function init(){
+            wrapper = document.getElementById('wrapper');
+            createCell();
+        }
+
+        addEventListener('load', function(){
+            init();
+        });
+
+    </script>
+</head>
+<body>
+    
+<div id = 'wrapper'></div>
+<button onClick = 'replay()'>재생하기</button>
+
+
+
+
+
+</body>
+</html>

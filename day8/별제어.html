@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let arr = [];
+
+        function init(){
+            for(let i = 0; i < 10; i++){
+
+                let span = document.createElement('span');
+                span.innerText = '★';
+
+                document.body.appendChild(span);
+                arr.push(span);
+                span.addEventListener('click', function(){
+                    // console.log('저는', i,'예요');
+                    this.style.color = 'red';
+                });
+            }
+        }
+
+        addEventListener('load', function(){
+            init();
+        });
+
+
+
+
+
+
+
+        // let divs;
+        // let div;
+        
+        // addEventListener('load', function(){
+        //     for(let i = 0; i < 10; i++){
+            
+        //         div = document.createElement('div');
+        //         div.name = 'div';
+        //         divs = document.getElementsByName('div');
+        //         div.innerText = '★';
+        //         div.style.fontSize = 40 +'px';
+        //         document.body.appendChild(div);
+
+        //         divs.addEventListener('click', function(){
+        //             this.style.background = 'orange';
+        //         });
+        //     }
+        // })
+        
+        // for(let i = 0; i < 10; i ++){
+        // }
+    </script>
+</head>
+
+<body>
+    
+</body>
+</html>

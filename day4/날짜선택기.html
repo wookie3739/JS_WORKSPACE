@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        addEventListener('load', function(){
+            createYear();
+            createMonth();
+            createDay();
+        });
+        //select 박스 안에 들어갈 option 태그 요소를
+        //동적으로 생성하여 연도 select 박스에 추가.
+        function createYear(){
+           
+            for(let year = 2012; year>=1940; year--){
+                let op = document.createElement('option');
+                op.text = year; // innerHTML과 같다. 
+                let yy = document.getElementById('yy');
+                 yy.add(op); // appendCHild와 같다.
+            }
+           
+            
+        }
+        function createMonth(){
+            for(let i = 1; i <= 12; i++){
+                let opm = document.createElement('option');
+                opm.text = i;
+                let mm = document.getElementById('mm');
+                mm.add(opm);
+            }
+        }
+        function createDay(){
+            
+            for(let i = 1; i <= 31; i++){
+                let opd = document.createElement('option');
+            opd.text = i;
+            let dd = document.getElementById('dd');
+            dd.add(opd);
+        }
+    }
+    </script>
+</head>
+<body>
+    <select id = "yy">
+        <option value = "">출생연도</option>
+    </select>
+    <select id = "mm">
+        <option value = "">월</option>
+    </select>
+    <select id = "dd">
+        <option value = "">일</option>
+    </select>
+</body>
+</html>

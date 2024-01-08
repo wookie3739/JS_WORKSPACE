@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let input;
+        let h3;
+
+        function a(){
+            let text = input[1].value;
+            let str = text.charAt(0);
+            if(text.length >= 7){
+
+                if(str === '1' || str === '3'){
+                    h3.innerHTML = "남성";
+                }
+                if(str === '2' || str === '4'){
+                    h3.innerHTML = "여성";
+                }
+            }
+        }
+
+
+        window.addEventListener('load', function(){
+            h3 = document.querySelector('h3');
+            input = document.getElementsByName('txt');
+            console.log(input.value);
+            input[1].addEventListener('keyup', function(){
+
+                a();
+            });
+        });
+        
+
+
+
+    </script>
+</head>
+<body>
+    <p>
+
+        <input type="text" name = "txt" placeholder="주민번호 앞 6자리">
+        -
+        <input type="text" name = "txt" placeholder="주민번호 뒤 7자리">
+
+    </p>
+
+    <h3>성별 출력란</h3>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src = "./Map.js"></script>
+    <script src = "./GameObject.js"></script>
+    <script src = "./Brick.js"></script>
+    <script src = "./Hero.js"></script>
+    <script src = "../lib/common.js"></script>
+    <script src = "./Sensor.js"></script>
+    <script src = "./LeftSensor.js"></script>
+    <script src = "./RightSensor.js"></script>
+    <script src = "./UpSensor.js"></script>
+    <script src = "./DownSensor.js"></script>
+    <script src = "./Enemy.js"></script>
+
+</head>
+<script>
+    let wrapper;
+    let brick_width = 40;
+    let brick_height = 40;
+    let col_count = 35;
+    let row_count = 30;
+    let hero;
+    let enemy;
+    let enemyArray = [];
+    // let enemy;
+    let brickArray = [];
+    let flag = true; // 게임 루프 실행여부를 결정짓는 논리값
+
+    function init(){
+        wrapper = document.getElementById('wrapper');
+        $("#wrapper").css({
+            width:(brick_width*col_count) + "px",
+            height:(brick_height*row_count) + "px",
+            background : "yellow",
+            margin: "auto",
+            position: "relative"
+        });    
+    }
+
+    function createBrick(x,y){
+        let brick = new Brick(wrapper,"../images/supermario/brick.png",x*brick_width,y*brick_height,brick_width,brick_height,0,0);
+        brickArray.push(brick); // 배열에 벽돌 추가
+    }
+
+    function createHero(x,y){
+        hero = new Hero(wrapper,"../images/supermario/피카츄.png",x*brick_width,y*brick_height,brick_width,brick_height,1,0);
+    }
+    function createEnemy(x,y){
+        enemy = new Enemy(wrapper,"../images/supermario/enemy.jpg",x*40,y*40,40,40,-1,0);
+        enemyArray.push(enemy);
+    }
+    function createMap(){
+        for(let i = 0; i < stage[0].length; i++){
+            for(let j = 0; j < stage[0][i].length; j++){
+                let n = stage[0][i][j];
+                switch(n){
+                    case 1 : createBrick(j,i); break; // 벽돌
+                    case 2 : createHero(j,i); break; // 주인공
+                    // case 3 : createMushroom(); break; // 버섯
+                    // case 4 : createStar(); break; // 별
+                    case 5 : createEnemy(j,i); break; // 적군
+                }
+            }
+        }
+    }
+
+    function gameLoop(){
+        
+        if(flag){
+            hero.move();
+            for(let i = 0; i < enemyArray.length; i++){
+
+                enemyArray[i].move();
+            }
+        }
+    }
+    $(function(){
+        //wrapper 초기화
+        init();
+        createMap();
+        document.body.addEventListener('keydown', function(e){
+            switch(e.keyCode){
+                case 27: flag = !flag; break; // pause, restart 전환
+                case 37:hero.velX = -5;break;
+                case 39:hero.velX = 5;break;
+                case 38:hero.velY = -5;break;
+                case 40:hero.velY = 5;break;
+            }
+        });
+        document.body.addEventListener('keyup', function(e){
+            switch(e.keyCode){
+                case 37:hero.velX = 0;break;
+                case 39:hero.velX = 0;break;
+                case 38:hero.velY = 0;break;
+                case 40:hero.velY = 0;break;
+            }
+        });
+        setInterval('gameLoop()',10);
+    });
+</script>
+<body>
+    <div id = "wrapper"></div>
+</body>
+</html>

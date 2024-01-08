@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src = "../lib/common.js"></script>
+    <style>
+        #wrapper{
+            width:1200px;
+            height:900px;
+            background-color: yellow;
+            position: relative;
+        }
+    </style>
+    <script>
+        let wrapper;
+        let brickArray= [];
+    //블럭 만들기 클래스 정의
+    class Brick{
+
+        constructor(x, y){ // 생성자 함수 (객체 생성시 호출)
+            this.x = x;
+            this.y = y;
+            this.img = document.createElement("img");
+            this.img.style.position = "absolute";
+            this.img.style.left = this.x + "px";
+            this.img.style.top = this.y + "px";
+            this.img.src = "../images/supermario/brick.png";
+            this.img.style.width = 50 + "px";
+            this.img.style.height = 50 + "px";
+            wrapper.appendChild(this.img);
+        }
+    }
+    function createBrick(){
+        
+        let brick = new Brick(getRandom(1200), getRandom(900));
+        brickArray.push(brick);
+
+    }
+    function deleteBrick(){
+        for(i = 0; i < brickArray.length; i++){
+            //화면에서 이미지 제거
+            wrapper.removeChild(brickArray[i].img);
+            // 배열도 제거
+            brickArray.splice(i, 1);
+        }
+
+
+    }
+    addEventListener('load', function(){
+        wrapper = document.getElementById('wrapper');
+
+    });
+
+
+
+    </script>
+</head>
+<body>
+    <button onClick = "createBrick()">생성하기</button>
+    <button onClick = "deleteBrick()">제거하기</button>
+    <div id = "wrapper"></div>
+</body>
+</html>

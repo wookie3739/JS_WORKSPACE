@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        text-decoration: none;
+        list-style-type: none;
+        /* background-color: darkslategray; */
+      }
+      #wrapper{
+        background-image: url(../images/눈배경.png);
+        background-size: 100% 100%;
+        overflow:hidden;
+      }
+      #wrap {
+        width: 500px;
+        height: 700px;
+        margin: 0 auto;
+        /* background-color: red; */
+        /* border:1px solid blue; */
+      }
+      #header {
+        width: 100%;
+        height: 100px;
+        text-align: center;
+        line-height: 100px;
+        font-size: 40px;
+        font-weight: bold;
+
+        border-bottom: 1px solid lightgray;
+        color: white;
+      }
+      #content {
+        width: 100%;
+        height: 600px;
+        background-color: yellow;
+        position: relative;
+        margin-top: 10px;
+      }
+      #content div {
+        text-align: center;
+        line-height: 100px;
+        font-size: 75px;
+        font-weight: bold;
+        color: white;
+      }
+      #key {
+        width: 1100px;
+        height: 350px;
+        margin: 0 auto;
+        /* background-color: aqua; */
+        margin-top: 30px;
+        position: relative;
+      }
+      #key div {
+        position: absolute;
+        width: 156px;
+        height: 100px;
+        background-color: lightgray;
+        text-align: center;
+        line-height: 100px;
+        font-size: 25px;
+        font-weight: bold;
+      }
+      #key > div:first-child {
+        bottom: 28px;
+      }
+      #key #back {
+        right: 0;
+        bottom: 28px;
+        font-size: 30px;
+      }
+      #next{
+        width:100px;
+        height:50px;
+        position: absolute;
+        background-color: white;
+        font-size:20px;
+        top:50%;
+        left:80%;
+        transform: translate(-50%,-50%);
+        display: none;
+      }
+      #main{
+        width:100%;
+        height:100vh;
+        /* background-color: yellow; */
+        position: relative;
+      }
+      #gameStart {
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
+        color:orangered;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #title{
+        position:absolute;
+        left:50%;
+        top:20%;
+        transform: translate(-50%,-50%);
+        font-size: 60px;
+        font-weight:bold;
+      }
+      #info{
+        position: absolute;
+        left:50%;
+        top:80%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        font-weight:bold;
+        border:2px solid black;
+        padding:10px;
+        cursor: pointer;
+      }
+      #desc{
+        position: absolute;
+        left:50%;
+        top:80%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        font-weight:bold;
+        border:2px solid black;
+        padding:10px;
+      }
+      #shutDown{
+        padding:10px 40%;
+      }
+    </style>
+    <script src="./Cell.js"></script>
+    <script src="./Keyboard.js"></script>
+    <script src="../lib/common.js"></script>
+    <script>
+      let cellArray = []; // 이차원 배열
+      let keyArr = []; // 키보드 이차원 배열
+      let keyArr1 = [];
+      let keyArr2 = [];
+      let keyArr3 = [];
+      let wrapper;
+      let content;
+      let key;
+      let keyboard;
+      let count;
+      let keyString;
+      let keyStringArr = [];
+      let alpabetArray = [
+        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+        ["Z", "X", "C", "V", "B", "N", "M"],
+      ]; // 키보드 순서대로 Q부터 keyboard에 대입
+      let answer = ["APPLE", "MODEL", "QUEST", "STEAL", "HUMAN"]; // 이차원 배열 생성
+      let enter;
+      let back;
+      let idx = 0;
+      let pressedKey;
+      let num = 0;
+      let color;
+      let main;
+      let gameStart;
+      let flag = true;
+      let info;
+      let shutDown;
+      let bgY = 0; // Y축 배경 내려가게하기
+      let s;
+      let snowArray = [];
+      function createCell() {
+        for (let i = 0; i < 6; i++) {
+          let arr = [];
+
+          for (let a = 0; a < 5; a++) {
+            let cell = new Cell(
+              content,
+              a * 100,
+              i * 100,
+              100,
+              100,
+              "",
+              "black"
+            );
+            cell.div.style.border = "1px solid white";
+            arr.push(cell);
+          }
+          cellArray.push(arr);
+        }
+
+        keyArr1 = [];
+        for (let i = 0; i < 10; i++) {
+          keyboard = new Keyboard(
+            key,
+            i * (100 + 11),
+            0,
+            100,
+            100,
+            alpabetArray[0][i],
+            "lightgray"
+          );
+          keyboard.div.style.borderRadius = 10 + "%";
+          keyboard.div.style.border = "1px solid lightgray";
+
+          keyArr1.push(keyboard);
+        }
+        keyArr.push(keyArr1);
+
+        keyArr2 = [];
+        for (let i = 0; i < 9; i++) {
+          keyboard = new Keyboard(
+            key,
+            55 + i * (100 + 11),
+            100 + 11,
+            100,
+            100,
+            alpabetArray[1][i],
+            "lightgray"
+          );
+          keyboard.div.style.borderRadius = 10 + "%";
+          keyboard.div.style.border = "1px solid lightgray";
+          keyArr2.push(keyboard);
+        }
+        keyArr.push(keyArr2);
+
+        keyArr3 = [];
+        for (let i = 0; i < 7; i++) {
+          keyboard = new Keyboard(
+            key,
+            166 + i * (100 + 11),
+            200 + 22,
+            100,
+            100,
+            alpabetArray[2][i],
+            "lightgray"
+          );
+          keyboard.div.style.borderRadius = 10 + "%";
+          keyboard.div.style.border = "1px solid lightgray";
+          keyArr3.push(keyboard);
+        }
+        keyArr.push(keyArr3);
+      }
+      // 키를 눌렀을 때 색상 입혀보기
+      // function pressKey() {
+      //   document.body.addEventListener("keydown", function (e) {
+
+      //     keyString = e.key.toUpperCase(); // 키 값의 글자를 가지고있음.
+
+      //     //키 값과 배열 인덱스를 가져오기
+      //    pressedKey = getPressedKey(keyArr, keyString);
+      //     if (pressedKey) {
+      //       pressedKey.div.style.background = changeColor(pressedKey,"blue");
+      //     }
+      //     keyStringArr.push(keyString); // 글자를 배열로 담아놓음(CellArr에서 쓰기위해)
+      //     console.log(keyStringArr);
+          
+      //     getKeyWord(keyStringArr);
+      //   });
+      // }
+      function pressKey() {
+  document.body.addEventListener("keydown", function (e) {
+    // 특정 키(F1, F2, Ctrl 등)일 때 아무 동작도 하지 않고 종료
+    // 왜냐하면 알파벳의 길이는 전부 1이기 때문이다. ex) a의 length = 1, f1의 length = 2
+    // control의 length = 6
+    if (e.key.length > 1) {
+      return;
+    }
+
+    keyString = e.key.toUpperCase(); // 키 값의 글자를 가지고 있음.
+
+    // 키 값이 알파벳인 경우에만 실행
+    // /^: 첫 번째 시작 문자 
+    // $/: 끝 번째 종료 문자
+    // 대문자 A~Z까지의 문자들 중 keyString에서 가져온 것을 테스트해서
+    // 만약 keyString(A~Z)이 이것들 중 만족한다면 true
+
+    if (/^[A-Z]$/.test(keyString)) {
+      // 키 값과 배열 인덱스를 가져오기
+      pressedKey = getPressedKey(keyArr, keyString);
+      if (pressedKey) {
+        pressedKey.div.style.background = changeColor(pressedKey, "blue");
+      }
+      keyStringArr.push(keyString); // 글자를 배열로 담아놓음(CellArr에서 쓰기위해)
+
+      getKeyWord(keyStringArr);
+    }
+  });
+}
+      function getPressedKey(keyArr, keyString) {
+        for (let i = 0; i < keyArr.length; i++) {
+          for (let j = 0; j < keyArr[i].length; j++) {
+            if (keyArr[i][j].text === keyString) {
+              return keyArr[i][j];
+            }
+          }
+        }
+      }
+      // 백스페이스 누르면 화면에서도 지우고 배열에서도 지우고
+      function getBack() {
+        
+        back.addEventListener("click", function(){
+          for(let i = cellArray.length -1; i >= 0; i--){
+            console.log("실행중", i);
+              let lastCell = cellArray[0][i];
+              if(lastCell.div.innerText != ""){
+                lastCell.div.innerText = ""; // 화면에서 지우기
+                keyStringArr.splice(i ,1); // 배열에서 지우기
+                break;
+              }
+            }
+        });
+      }
+      function getEnter() {
+        let enter = document.getElementById("enter");
+        enter.addEventListener("click", function(){
+          if (keyStringArr.length % 5 === 0) {
+            alert("진행하세요");
+            checkWord();
+          } 
+          else{
+            alert("5글자를 입력해주세요");
+            return;
+          }
+        });
+      }
+      function changeColor(key,color){
+        
+        key.div.style.background = color;
+      }
+      function checkWord() {
+        let answerKey = idx / 5;
+        count = answerKey;
+        let n = 0;
+          color = {
+            green : 0,
+            yellow: 0,
+            gray: 0
+        };
+        console.log(keyStringArr);
+        for (let i = idx; i < keyStringArr.length; i++) {
+            console.log("num:",num , keyStringArr[i], answer[num][i % 5]);
+            
+            if (answer[num][i % 5] === keyStringArr[i]) {
+                changeColor(cellArray[count][n], "green");
+                changeColor(pressedKey, color);
+                color.green++;
+          } else if (answer[num].includes(keyStringArr[i])) {
+            changeColor(cellArray[count][n], "yellow");
+            color.yellow++;
+          } else {
+            changeColor(cellArray[count][n], "gray");
+            color.gray++;
+          }
+          
+          if (n === 4) {
+            n = 0;
+            count++;
+          } else {
+            n++;
+          }
+        }
+        idx += 5;
+        console.log("-------");
+        //만약 한 줄에 초록색이 5칸을 먹게 되면 알림뜨고 버튼이 생기게끔 하자
+        if(color.green >= 5){
+            alert("다음 단계로 넘어가세요!");
+            next.style.display = "block";
+            nextQuestion();
+            idx = 0;
+
+        }
+
+      }
+      function nextQuestion(){
+        next.addEventListener('click', function(){
+            keyStringArr = [];
+            for(let i = 0; i < cellArray.length; i++){
+                for(let j = 0; j < cellArray[i].length; j++){
+                    cellArray[i][j].div.innerText = "";
+                    cellArray[i][j].div.style.background = "black";
+
+                }
+            }
+          num++;
+          next.style.display = "none";
+        })
+
+      }
+      //글자를 담아놓은 keyStringArr 배열에서 cellArr로 하나씩 뿌리기
+      function getKeyWord(arr) {
+        let count = 0;
+        let n = 0;
+          
+
+          for (let i = 0; i < arr.length; i++) {
+            cellArray[count][n].div.innerText = arr[i];
+            n++;
+            if (n === 5) {
+              n = 0;
+              count++;
+            }
+          }
+
+        }
+      // 첫 화면
+      function createMain(){
+        main.style.backgroundImage = "url('../images/cream.png')";
+        main.style.backgroundSize = 100 + "% " + 100 + "vh";
+        
+      }
+
+        class Snow{
+            
+            constructor(x,y,velX,velY,w,h,op){
+
+                //객체와 생명을 같이 하는 객체 소속 변수 멤버변수
+                this.x = x; // 눈의 x 좌표
+                this.y = y; // 눈의 y 좌표
+                this.velX = velX; // 눈의 x 축 방향으로의 속도
+                this.velY = velY; // 눈의 y 축 방향으로의 속도
+                this.width = w;
+                this.height = h;
+                this.op = op; //투명도
+
+                this.div = document.createElement('div');
+                this.div.style.width = this.width+"px";
+                this.div.style.height = this.height + "px";
+                this.div.style.backgroundColor = "rgba(255,255,255,"+this.op+")";
+                this.div.style.position = "absolute";
+                this.div.style.left = this.x + "px"; // 랜덤
+                this.div.style.top = this.y + "px"; // 랜덤
+                this.div.style.borderRadius = 50 + "%";
+                this.div.style.filter = "blur(2px)";
+                //화면에 부착
+                wrapper.appendChild(this.div);
+            }
+
+            move(){
+                this.x = this.x + this.velX; 
+                this.y = this.y + this.velY;
+                this.div.style.left = this.x + "px";
+                this.div.style.top = this.y + "px";
+            }
+
+
+        }
+
+        function createSnow(){
+            for(let i = 0; i < 100; i++){
+                let x = getRandom(1200);
+                let y = getRandom(900);
+                let velX = getRandomByRange(-5,5); // -5, 5
+                let velY = getRandomByRange(1,7); // 1 ~ 7
+                let w = getRandomByRange(3,6);
+                let h = getRandomByRange(3,6);
+                let op = getRandomByRange(0.1,2);
+                let s = new Snow(x,y,velX,velY,w,h,op); 
+
+                snowArray.push(s);
+            }
+        }
+      // function bgEffect(){
+      //   bgY++;
+      //   wrapper.style.backgroundPosition = "0px " + bgY + "px";
+      // }
+      function gameLoop(){
+        flag = !flag;
+        if(flag){
+          gameStart.style.opacity = 1;
+        }else{
+          gameStart.style.opacity = 0;
+        }
+        // bgEffect();
+        for(let i = 0; i < snowArray.length; i++){
+
+        snowArray[i].move(); 
+        }
+      }
+
+      function createInterval(){
+        createSnow();
+        if(snowArray.length >= 1000 ){
+
+          for(let i = 0; i < snowArray.length; i++){
+
+              
+              wrapper.removeChild(snowArray[i].div);
+            }
+            
+            snowArray = [];
+          }
+        }
+      
+      addEventListener("load", function () {
+        content = document.getElementById("content");
+        key = document.getElementById("key");
+        enter = document.getElementById("enter");
+        back = document.getElementById("back");
+        next = document.getElementById('next');
+        main = document.getElementById('main');
+        info = document.getElementById('info');
+        wrapper = document.getElementById('wrapper');
+        gameStart = document.getElementById('gameStart');
+        desc = document.getElementById('desc');
+        shutDown = document.getElementById('shutDown');
+        desc.style.display = "none";
+        wrap.style.display = "none";
+        key.style.display = "none";
+        
+        //게임 시작
+        gameStart.addEventListener('click', function(){
+          wrap.style.display = "block";
+          key.style.display = "block";
+          main.style.display = "none";
+          info.style.display = "none";
+          desc.style.display = "none";
+
+        });
+        //게임 설명
+        info.addEventListener('click', function(){
+          info.style.display = "none";
+          desc.style.display = "block";
+        });
+        shutDown.addEventListener('click', function(){
+          desc.style.display = "none";
+          info.style.display = "block";
+        });
+        setInterval("gameLoop()", 100);
+        createCell();
+        pressKey();
+        getEnter();
+        getBack();
+        createMain(); // 겉 표지
+        createSnow(); // 눈 내리기
+        setInterval("createInterval()", 8000);
+
+      });
+      
+    </script>
+  </head>
+  <body>
+    <!-- <!— 박스는 5호씩 6층 —>
+    <!— 키보드는 1층 10개, 2층 9개, 3층 7개 —> -->
+    <button id = "next" >다음문제</button>
+    <div id = "wrapper">
+
+      <div id="wrap">
+        <div id="header">Wordle</div>
+        <div id="content"></div>
+      </div>
+      <div id="key">
+        <div id="enter">힌트 확인</div>
+        <div id="back">◁</div>
+     
+     </div>
+    </div>
+    
+    <div id = "main">
+      <div id = "title">WORDLE GAME</div>
+      <div id = "info">게임 설명
+      </div>
+      <ul id = "desc">게임 설명
+        <li>한 줄을 입력 후 힌트 확인을 눌렀을 때</li>
+        <li>초록색: 철자와 위치가 전부 맞음</li>
+        <li>노란색: 철자는 맞고 위치는 틀림</li>
+        <li>회색: 철자와 위치가 전부 틀림</li>
+        <li>범인은 크림이</li>
+        <button id = "shutDown">닫기</button>
+      </ul>
+      <div id = "gameStart">GAME START</div>
+    </div>
+  </body>
+</html>

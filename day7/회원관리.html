@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper {
+            width: 1200px;
+            height: 900px;
+            margin: auto;
+            /* display: flow-root; */
+            /* background-color: lightgreen; */
+        }
+        #leftSide{
+            width: 200px;
+            height: 100%;
+            float: left;
+            /* background-color: aqua; */
+        }
+        #leftSide input, #rightSide input{
+            width: 95%;
+            height: 45px;
+            border-radius: 5px;
+            outline: none;
+            /* border: transparent; */
+        }
+        #searchSide {
+            text-align: center;
+        }
+        #searchSide select, #searchSide input{
+            width: 200px;
+            height: 45px;
+        }
+
+        #centerSide{
+            width: 800px;
+            height: 100%;
+            float: left;
+            /* background-color: aquamarine; */
+        }
+        #rightSide{
+            width: 200px;
+            height: 100%;
+            float: left;
+            /* background-color: lightskyblue; */
+        }
+    </style>
+    <script>
+        let content; //테이블 출력될 영역
+        let data=[]; //여러 사람 정보를 담아놓을 2차원(즉, 표 형태의 데이터)
+        let currentIndex; // 현재 사용자가 선택한 회원의 data 배열의 index
+
+        //한 사람에 대한정보를 데이터베이스에 누적시키자
+        //실제 DBMS에 연동이 불가능, 일종의 메모리상의 db역할을 해줄
+        //이차원 배열에 저장해놓자
+        function regist(){
+            //등록작업을 수행하기전에, 제대로 입력했는지 유효성체크하기
+            if(form1.id.value=="") {
+                alert("아이디를 입력하세요");
+                return;
+            } else if(form1.name.value=="") {
+                alert("이름을 입력하세요")
+                return;
+            } else if(form1.phone.value=="") {
+                alert("연락처를 입력하세요")
+                return;
+            }
+
+            //한 사람에 대한 정보를 일차원배열로 생성해보자
+            let member=[];
+            //DOM(Document Object Model )
+            member[0]=form1.id.value;
+            member[1]=form1.name.value;
+            member[2]=form1.phone.value;
+
+            //이차원 배열에 한사람 정보를 누적
+            data.push(member);      
+            
+            //목록 출력
+            getList();
+
+            //입력폼 초기화
+            form1.id.value="";
+            form1.name.value="";
+            form1.phone.value="";
+
+            //커서를 다시 ID에 올려놓기
+            form1.id.focus();
+        }   
+
+        // 이미 준비 된 데이터 가져오기
+        function loadData(){
+            data.push(["scott12","스캇1","010-7777-8881"]);
+            data.push(["scott1","스캇2","010-7777-8882"]);
+            data.push(["scott2","스캇3","010-7777-8883"]);
+            data.push(["scott3","스캇4","010-7777-8884"]);
+            data.push(["scott4","스캇5","010-7777-8885"]);
+            data.push(["scot5t","스캇6","010-7777-8886"]);
+            data.push(["scott6","스캇7","010-7777-8887"]);
+
+            getList();
+        }
+        //현재 선택 된 회원의 정보를 우측 영역에 출력!
+        function getDetail(n){
+            currentIndex = n; // 전역변수에 보관, 다른 함수영역에서 접근할 수 있도록.
+            let member = data[n];
+            console.log(member);
+            //한 사람 정보를 우측 영역에 출력하자
+            form2.id.value = member[0]; // 아이디
+            form2.name.value = member[1]; // 이름
+            form2.phone.value = member[2]; // 연락처
+
+        }
+        //쌓여있는 이차원배열로부터 html table로 시각화 시킬 수 있는
+        //함수 정의
+        function getList(){
+            let tag="<table border=\"1px\" width=\"100%\">";
+                tag += "<tr>";
+                tag += "<td>No</tb>";
+                tag += "<td>ID</tb>";
+                tag += "<td>Name</tb>";
+                tag += "<td>Phone</tb>";
+                tag += "</tr>";
+                
+                // 이차원 배열의 크기 즉, 층수만큼 반복문 돌리기
+                let total=data.length;
+
+                for(let i=0; i<data.length; i++){
+                    let member = data[i]  //한 사람의 정보 (일차원 배열)
+
+                    tag += "<tr onClick = \"getDetail("+i+")\" onMouseOver=\"this.style.background='yellow'\" onMouseOut=\"this.style.background=''\">";                        
+                    tag += "<td>" + (total--) + "</tb>";
+                    tag += "<td>" + member[0] +"</tb>";
+                    tag += "<td>" + member[1] +"</tb>";
+                    tag += "<td>" + member[2] +"</tb>";
+                    tag += "</tr>";
+                }
+
+                tag += "</table>";
+            content.innerHTML = tag;
+        }
+        //회원 삭제
+       function del(){
+        
+        // 유효성 체크
+        if(currentIndex === undefined){
+            alert('욕할게요');
+            return;
+        }
+        
+        let result = confirm('선택 된 회원을 삭제하시겠습니까?'); // 논리값사용
+        if(result){
+            data.splice(currentIndex, 1);
+            
+            //화면 갱신
+            getList();
+        }
+       }
+       //현재 선택된 회원의 index를 이용하여 일차원 배열을 꺼내서 그 일차원 배열을 이루고
+       //있는 아이디, 이름, 연락처를 수정해보자
+       function edit(){
+        console.log('수정하려는 회원은 ', currentIndex, '층에 살아요');
+
+        //currentIndex를 이용하여 이차원배열인 data에서 일차원배열 꺼내기
+        data[currentIndex][0] = form2.id.value; // ID
+        data[currentIndex][1] = form2.name.value; // name
+        data[currentIndex][2] = form2.phone.value; // phone
+
+        getList();
+
+       }
+
+        addEventListener("load", function(){
+            content=document.getElementById("content");
+            getList(); //회원목록을 조회..
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="leftSide">
+            <form name="form1">
+                <div>
+                    <input type="text" name="id" placeholder="ID 입력..">
+                </div>
+                <div>
+                    <input type="text" name="name" placeholder="Name 입력..">
+                </div>
+                <div>
+                    <input type="text" name="phone"  placeholder="Phone 입력..">
+                </div>
+                <div>
+                    <!-- button 타입을 주지않으면 전송되어 새로고침수행 -->
+                    <button type="button" onClick = "regist()">등록</button>
+                    <button type="button" onClick = 'loadData()'>불러오기</button>
+                </div>
+            </form>
+        </div>
+        <div id="centerSide">
+            <div id="searchSide">
+                <select>
+                    <option value="">선택</option>
+                    <option value="">ID</option>
+                    <option value="">이름</option>
+                    <option value="">연락처</option>
+                </select>
+                <input type="text" placeholder="검색어 입력">
+                <button>검색</button>
+            </div>
+            <div id="content">리스트영역</div>
+        </div>
+        <div id="rightSide">
+            <form name="form2">
+                <div>
+                    <input type="text" name = 'id' placeholder="ID 입력..">
+                </div>
+                <div>
+                    <input type="text" name = 'name' placeholder="Name 입력..">
+                </div>
+                <div>
+                    <input type="text" name = 'phone' placeholder="Phone 입력..">
+                </div>
+                <div>
+                    <button type = 'button' onClick = 'edit()'>수정</button>
+                    <button type ='button' onClick = 'del()'>삭제</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:600px;
+            height:400px;
+            margin:0 auto;
+            background-color: yellow;
+        }
+        #header{
+            width:100%;
+            height:50px;
+            background-color: red;
+        }
+        #content{
+            width:100%;
+            height:350px;
+            background-color: purple;
+        }
+        #header div{
+            float:left;
+            width:200px;
+            height:50px;
+            text-align: center;
+            line-height: 50px;
+            font-weight:bold;
+
+        }
+        #header div:first-child{
+            background-color: blue;
+        }
+        #header div:nth-child(2){
+            background-color: yellow;
+        }
+        #header div:last-child{
+            background-color: green;
+        }
+        #content div{
+            width:600px;
+            height:350px;
+        }
+        #table1{
+            background-color: blue;
+        }
+        #table2{
+            background-color: yellow;
+            display:none;
+        }
+        #table3{
+            background-color: green;
+            display:none;
+        }
+    </style>
+    <script>
+        // 선택한 탭에 해당하는 테이블은 보여주되, 나머지는 모두 안 보이게 처리
+        function showHide(index){
+            let table = document.getElementsByName('table');
+
+            for(let i = 0; i<table.length; i++){
+                
+                if(index == i){
+                    table[i].style.display = 'block';
+                }else{
+                    table[i].style.display = 'none';
+                }
+
+            }
+        }
+
+        function init(){
+            let tab = document.getElementsByName('tab');
+            for(let i = 0; i < tab.length; i++){
+                tab[i].addEventListener('click', function(event){
+                    showHide(i);
+                });
+            }
+        }
+    
+        addEventListener('load', function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    
+    <div id = 'wrapper'>
+        <div id = 'header'>
+            <div name = 'tab'>QnA</div>
+            <div name = 'tab'>FAQ</div>
+            <div name = 'tab'>1:1질문</div>
+        </div>
+        <div id = 'content'>
+            <div id = 'table1' name = 'table'>QnA 게시물</div>
+            <div id = 'table2' name = 'table'>FAQ 게시물</div>
+            <div id = 'table3' name = 'table'>1:1 질문 게시물</div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

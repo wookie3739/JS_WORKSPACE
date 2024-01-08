@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 700px;
+            height: 700px;
+            margin: auto;
+            background-color: aqua;
+        }
+        #header{
+            width: 100%;
+            height: 50px;
+            background-color: aquamarine;
+            line-height: 50px;
+            text-align: center;
+        }
+        #content {
+            width: 100%;
+            height: 650px;
+            position: relative;
+        }
+    </style>
+    <script src="../lib/common.js"></script>
+    <script>
+        let wrapper;
+        let header;
+        let content;
+        let title; //달력의 제목 영역
+        //생성된 셀들을 추후에 접근하기 위해서 배열에 담아놓자
+        let cellArray=[];
+        //디폴트로 현재 날짜 구하기 (공유될 날짜 객체)
+        let currentDate = new Date();
+        //달력의 날짜를 이루는 셀박스를 정의한다.
+        class Cell{
+            constructor(container, x, y, width, height, text, bg){
+                this.container = container;
+                this.div=document.createElement("div");
+                this.x =x;
+                this.y =y;
+                this.width =width;
+                this.height = height;
+                this.text =text;
+                this.bg =bg;
+                //스타일
+                this.div.style.position="absolute";
+                this.div.style.left=this.x + "px";
+                this.div.style.top=this.y + "px";
+                
+                this.div.style.width=this.width + "px";
+                this.div.style.height=this.height + "px";
+                
+                this.div.style.background= this.bg;
+                this.div.innerText = this.text;
+                this.div.style.border= "1px solid grey";
+                this.div.style.boxSizing= "border-box";
+                this.container.appendChild(this.div);
+            }
+        }
+        function printTitle(){
+            let yy = currentDate.getFullYear();
+            let mm = currentDate.getMonth(); //0~11까지
+            
+            //월은 비록 0부터 시작하나, 일반인들에게 시각화시
+            //+1을 해주는 습관
+            title.innerText = yy+"년" + getNumString(mm+1) +"월";
+        }
+        function prev(){ //다음 월 처리(현재 사용중인 날짜객체 다음 월로 세팅)
+            let mm=currentDate.getMonth();
+            currentDate.setMonth(mm-1);
+            printTitle();
+            printNum();
+        }
+        function next(){ //다음 월 처리(현재 사용중인 날짜객체 다음 월로 세팅)
+            let mm=currentDate.getMonth();
+            currentDate.setMonth(mm+1);
+            printTitle();
+            printNum();
+        }
+        
+        
+        function createCell(){
+            let count=0;
+            for(let i=0; i<6; i++){
+                let array=[]; //한 층을 담는 배열
+                for(let a=0; a<7; a++){
+                    let cell = new Cell(content, 100*a, 50+(100*i), 100, 100, "", "lightgreen");
+                    array.push(cell); //생성된 셀을 배열에 담아보자
+                    //마우스를 올려놓으면 배경색 부여
+                    cell.div.addEventListener("mouseover", function(){
+                        this.style.background="pink";
+                    });
+                    cell.div.addEventListener("mouseout", function(){
+                        this.style.background="lightgreen";
+                    });
+                }
+                cellArray.push(array);
+            }
+        }
+        
+        // 달력에 날짜를 출력하기 위해서는 개발자가 2가지 정보를 알아야 한다.
+        // 1) 각 월은 무슨 요일부터 시작하는가? (시작값)
+        // 2) 각 월은 몇일까지 존재하는가?  (끝값)
+       
+        function getStartDayOfWeek(){ //각 월의 시작요일
+            let day=new Date(); //망가져도 상관없는 날짜 객체 생성
+            day.setFullYear(currentDate.getFullYear()); //현재 내가 보고있는 연도
+            day.setMonth(currentDate.getMonth());
+            day.setDate(1);
+            return day.getDay(); //너 무슨 요일이야?
+        }
+        function getlastDayOfMonth(){ //각 월의 마지막일 구하기
+            let day = new Date(); //조작하거나 망가져도 상관없는 날짜 객체
+            day.setFullYear(currentDate.getFullYear()); //
+            day.setMonth(currentDate.getMonth() + 1); //현재 보고있는 달 +1
+            day.setDate(0); //이 시점 이전달로 이동, 날짜는 마지막날
+            return day.getDate(); //너는 몇일이니?
+        }
+        //이차원 구조로 되어 있는, 셀들의 텍스트를 바꿀 수 있는 함수
+        function printNum(){
+            let n=0;
+            let d=0; //실제 날짜를 누적할 변수(1일,..,)
+            for(let i=0; i<6; i++){     // 층수만큼(week)
+                for(let a=0; a<7; a++){ // 호수만큼(요일)
+            
+                    let str=""; //실제 div에 출력될 문자열
+                    if(n>=getStartDayOfWeek() && d< getlastDayOfMonth()){//각 월의 시작 요일부터는.. 날짜를 센다.
+                        d++
+                        str=d;//날짜 범위내에 있을때는 날짜를 대입
+                    }    
+                    let cell = cellArray[i][a]; //지정한 좌표 객체 꺼내기
+                    cell.text=str;
+                    cell.div.innerText=str;
+                    n++;
+                }
+            }
+        }
+        function createDay(){
+            let dayArray=["Sun","Mon","Tue","Wed","Thur","Fri","Sat"];
+            for(let i=0; i<7; i++){
+                let cell=new Cell(content, i*100,0, 100, 50, dayArray[i],"lightgrey");
+            }
+        }
+        addEventListener("load", function(){
+            wrapper =document.getElementById("wrapper");
+            header =document.getElementById("header");
+            content=document.getElementById("content");
+            title = document.getElementById("title");
+            
+            printTitle(); //제목출력
+            createDay(); //요일출력
+            createCell(); //날짜출력
+            printNum(); //셀이 존재한 이후에 호출
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <button onclick="prev()">이전</button>
+            <span id="title">2014년 08월</span>
+            <button onclick="next()">다음</button>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

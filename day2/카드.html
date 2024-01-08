@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrap{
+            width:300px;
+            height:400px;
+            /* background-color: red; */
+            text-align: right;
+        }
+        #wrap img{
+            width:200px;
+            height:300px;
+        }
+    </style>
+    <script>
+        let n = 1;
+        let str = "";
+        let order =4;
+function joker() {
+    img.src = "../images/card/joker.png";
+}
+function cardImage(){
+    img.src = "../images/card/h" + n + ".png";
+}
+//조커사진이 등장할 순번을 결정짓는 전역변수의 값을 현재 select 박스에서 선택한
+// 값으로 대체하자.
+function setOrder(){
+    order = document.getElementById("sel").value;
+}
+function btn() {
+    let img = document.getElementById("img");
+    
+    n++;
+    if(n>10) return;
+    
+    str = (n % order === 0 ) ? joker() : cardImage();
+    // if (n % 3 === 0) {
+    //     joker();
+    // } else {
+    //     cardImage();
+    // }
+}
+    </script>
+</head>
+<body>
+    <div id = "wrap">
+        <select id="sel" onChange="setOrder()"> 
+            <option>조커를 등장시킬 순번</option>
+            <option value ="2">2</option>
+            <option value ="3">3</option>
+            <option value ="4">4</option>
+
+        </select>
+        <button onClick = "btn()">버튼</button>
+        <p></p>
+        <img id = "img" src = "../images/card/h1.png">
+    </div>
+</body>
+</html>

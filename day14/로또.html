@@ -1,0 +1,28 @@
+<script src = "../lib/common.js"></script>
+<script>
+    let numArray = [];
+    let winArray = [];
+    //로또 번호 채우기
+    for(let i = 1; i <=45; i++){
+        numArray.push(i);
+    }
+
+    //당첨번호가 6개에 도달할 때까지, 계속 시도해야하므로 무한루프로 시도한다.
+    while(true){
+        //당첨번호 추출
+        let n = getRandomByRange(1,numArray.length+1);
+        // console.log("추출된 랜덤 수는", n );
+        //6개까지만 아래의 작업을 진행
+        if(winArray.length < 6){
+
+            //당첨번호 내역에 없는 번호일 경우만 추가
+            if(winArray.indexOf(n) === -1){
+                
+                winArray.push(n);
+            }
+        }else{
+            break; // 반복문 빠져나오기
+        }
+    }
+    console.log(winArray);
+</script>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+
+        #wrapper{
+            width:700px;
+            height:300px;
+            border:5px solid #ccc;
+            margin: 0 auto;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #wrapper input{
+            padding:10px;
+            margin:10px;
+        }
+        #bt {
+            width:200px;
+            padding:20px;
+            cursor: pointer;
+        }
+
+
+    </style>
+    
+</head>
+<body>
+    
+    <div id = "wrapper">
+        <input id = "t_h" type="text" value = "00">시
+        <input id = "t_m" type="text" value = "00">분
+        <input id = "t_s" type="text" value = "00">초
+        <button id = "bt" onClick="start(); effect();">Start</button>
+    </div>
+
+
+
+    <script>
+        let sec = 0; // 초가 누적될 전역변수
+        let min = 0; // 분이 누적될 전역변수
+        let hr = 0;
+        let flag = false;
+        function start(){
+            //시, 분, 초 값을 적절히 증가시켜보자
+            let t_s = document.getElementById("t_s");
+            let t_m = document.getElementById("t_m");
+            let t_h = document.getElementById("t_h");
+
+            if(flag){
+                sec++;
+            //sec의 값을 증가시키다 60이상이 되면 다시 0으로 초기화
+            if(sec >= 60){
+                sec = 0;
+                min++;
+            }else if(min >= 60){
+                min = 0;
+                hr++;
+            }else if(hr >= 100){
+                return;
+            }
+        }
+            t_s.value = sec;
+            t_m.value = min;
+            t_h.value = hr;
+        
+            
+            
+            //setInterval("함수(), 시간간격")은 지정된 시간간격으로 지정한
+            //함수를 무한호출
+
+            //setTimeout("함수()", 시간간격)은 지정된 시간간격 후에
+            // 지정한 함수를 오직 1회만 호출(재귀호출)
+            setTimeout("start()", 100);
+
+        }
+
+        //버튼을 누를 때마다 flag의 상태를 뒤집기
+            //버튼을 누를 때마다 버튼의 제목도 뒤집기
+            function effect(){
+                flag = !flag;
+                if(flag) { // 시계가 작동하고 있으므로 stop보여줘야함
+                    document.getElementById('bt').innerText = "Stop";
+                }else{
+                    document.getElementById('bt').innerText = "Start";
+                }
+        }
+        // function start(){
+        //     setInterval("showtime()", 1);
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // let bt = document.getElementById("bt");
+        // let sec = document.getElementById('t_s');
+        // let min = document.getElementById('t_m');
+        // let hr = document.getElementById('t_h');
+        // let sec_count = 0;
+        // let min_count = 0;
+        // let hr_count = 0;
+
+        // bt.addEventListener('click', function(){
+        //     if(sec_count >= 9){
+        //         sec_count = 0;
+        //     }else{
+        //         count++;
+        //         sec.value = sec_count;
+        //     }
+        //     if(min_count >= 9){
+        //         min_count = 0;
+        //     }else{
+        //         min.value = min_count;
+        //     }
+
+        //     function sec(){
+
+        //     }
+
+
+
+        // });
+    </script>
+
+</body>
+</html>

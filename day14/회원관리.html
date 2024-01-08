@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:800px;
+            height:100vh;
+            margin: 0 auto;
+            text-align: center;
+            /* display: flex;
+            flex-wrap: wrap; */
+        }
+        #wrapper input{
+            width:750px;
+            height:50px;
+        }
+        #address input{
+            width:300px;
+        }
+        #address input:last-child{
+            width:750px;
+        }
+        
+        #skills{
+            width:750px;
+            height:50px;
+            display: flex;
+            margin-top:20px;
+        }
+        #email{
+            display:flex;
+            margin-top : 20px;
+        }
+    </style>
+    <script>
+        let memberList =[];
+        let page;
+
+        function createYear(){
+            //1945~2010 사이의 옵션 생성
+           let yy = document.getElementsByName("yy"); // 배열
+            
+            for(let i = 2010; i > 1945; i--){
+                
+                
+                let op = document.createElement("option");
+                op.text = i; // <option>2010</option>
+                op.value = i;// <option value = "2010">2010</option>
+                yy[0].add(op);
+                // if(i === 2002){
+                //     op.defaultSelected;
+                // }
+            }
+            
+
+        }
+
+        //문서가 로드되면, 문서안의 모든 태그마다 1:1 대응하는 객체가 
+        //생성되는데, 이러한 html의 태그를 본떠서 만든 객체들을 가리켜
+        //DOM이라 한다. 따라서 개발자는 DOM Api를 이용하여 DOM 객체들을
+        // 제어할 수 있고 DOM 객체를 제어하면 간접적으로 HTML에 변경사항이
+        // 적용이 된다.
+        addEventListener('load',function(){
+            //배열로 존재하는 div들을 전역변수로 빼놓자
+            page = document.getElementsByName("page");
+
+            createYear();
+            let bt = document.getElementsByName('bt');
+            //우편번호 버튼에 이벤트 연결
+            bt[0].addEventListener('click', function(){
+
+            });
+            //회원가입 버튼에 이벤트 연결
+            bt[1].addEventListener('click', function(){
+                regist();
+            });
+            //회원목록 버튼에 이벤트 연결
+            bt[2].addEventListener('click', function(){
+                showHide(1);
+                getList();
+            });
+            showHide(0); // 회원가입 폼 가져오기
+            getList();
+        });
+        function showHide(n){
+            for(let i = 0; i < page.length; i++){
+                if(i===n){
+
+                    page[i].style.display = "block";
+                }else{
+
+                    page[i].style.display = "none";
+                }
+            }
+        }
+        function getList(){
+            let tag = "<table width = \"100%\" border = \"1px\">";
+                tag += "<tr>";
+                    tag += "<td>No</td>";
+                    tag += "<td>ID</td>";
+                    tag += "<td>PW</td>";
+                    tag += "<td>Name</td>";
+                    tag += "<td>Address</td>";
+                    tag += "<td>Skill</td>";
+                    tag += "<td>수신 여부</td>";
+                    tag += "<td>출생연도</td>";
+                tag += "</tr>";
+
+                
+                //memberList에 들어있는 JSON들을 꺼내어, 아래의 표에 넣어보기
+                let no = memberList.length;
+                for(let i = 0; i < memberList.length; i++){
+                    tag += "<tr>";
+                        tag += "<td>"+(no--)+"</td>";
+                        tag += "<td>"+memberList[i].id+"</td>";
+                        tag += "<td>"+memberList[i].pass+"</td>";
+                        tag += "<td>"+memberList[i].name+"</td>";
+                        tag += "<td>"+memberList[i].addr+"</td>";
+                        let str = "";
+                        for(let a = 0; a < memberList[i].skill.length; a++){
+                            str += memberList[i].skill[a] + "<br>";
+                        }
+                        tag += "<td>"+str+"</td>";
+                        tag += "<td>"+memberList[i].receive+"</td>";
+                        tag += "<td>"+memberList[i].yy+"</td>";
+                        tag += "</tr>";
+                    }
+                    tag += "</table>";
+                    page[1].innerHTML = tag;
+        }
+        function regist(){
+            let count = 0;
+            //아이디에 대한 유효성 체크
+            if(form1.id.value.length<1){
+                alert("아이디를 입력하세요");
+                form1.id.focus();
+                return;
+            }
+            if(form1.pass.value==""){
+                alert("비밀번호를 입력하세요");
+                form1.pass.focus();
+                return;
+            }
+            if(form1.pass.value != form1.pass2.value){
+                alert("비밀번호가 일치하지 않습니다.");
+                form1.pass.focus();
+                return;
+            }
+            if(form1.name.value == ""){
+                alert("이름을 입력하세요");
+                form1.name.focus();
+                return;
+            }
+            if(form1.name.value.length < 2){
+                alert("제대로 입력해주세요");
+                form1.name.focus();
+                return;
+            }
+            if(form1.addr.value ==""){
+                alert("주소를 입력하세요");
+                form1.addr.focus();
+                return;
+            }
+            //체크 여부 처리
+            let skill = document.getElementsByName("skill");
+            for(let i = 0; i < skill.length; i++){
+
+                if(skill[i].checked){
+                    count++;
+                }
+            }
+
+
+
+            if(count<1){
+                alert("적어도 기술 하나는 있어야 합니다.");
+                return;
+            }
+            //서버에 전송해야 하지만, 운영중인 서버가 없으므로 임시로
+            //메모리에 JSON을 이용하여 임시메모리 db를 구축해보자
+
+            //현재 체크박스에 체크가 된 과목을 이용하여 배열을 채워보자
+            let arr = [];
+            for(let i = 0; i < skill.length; i++){
+                if(skill[i].checked){
+                    arr.push(skill[i].value);
+                }
+            }
+            //메일 수신 여부를 선택하는 라디오박스들을 대상으로
+            //체크 된 라디오박스의 값만 보관해놓자
+            let r = document.getElementsByName("receive");
+            let receive = "";
+            for(let i = 0; i < r.length; i++){
+                if(r[i].checked){
+                    receive = r[i].value;
+                }
+            }
+
+            // 한 사람의 정보는 JSON 한 개 객체로 보관해보자
+            let member = {
+                id:form1.id.value,
+                pass:form1.pass.value,
+                name:form1.name.value,
+                addr:form1.addr.value,
+                skill:arr,
+                receive:receive,
+                yy:form1.yy.value
+            };
+            console.log("가입하려는 회원의 정보", member);
+
+            //생성된 JSON을 memberList에 추가하기
+            memberList.push(member);
+            console.log("현재까지 누적된 회원은", memberList);
+        }
+    </script>
+</head>
+<body>
+    <div id = 'wrapper'>
+
+        <div id = "regist_page" name = "page">
+
+        
+        <h2>회원가입</h2>
+        <form name = "form1">
+            <input type="text" name = "id" placeholder="ID...">
+            <input type="text" name = "pass" placeholder="Pass..">
+            <input type="text" name = "pass2" placeholder="Pass2..">
+            <input type="text" name = "name" placeholder="Name...">
+            <div id = 'address'>
+                <input type="text" readonly>
+                <button type = "button" id = "find-btn" name = "bt">주소</button>
+                <input type="text"  id = "addr">
+            </div>
+            <div id = "skills">
+                <p>SKILL</p>
+                Java<input type="checkbox" name = "skill" value = "Java">
+                Oracle<input type="checkbox" name = "skill" value = "Oracle">
+                C#<input type="checkbox" name = "skill" value = "C#">
+                Python<input type="checkbox" name = "skill" value = "Python">
+                Spring<input type="checkbox" name = "skill" value = "Spring">
+                
+            </div>
+            
+            <div id = "email">
+                <p>메일 수신</p>
+                <input type = "radio" name = "receive" value = "yes">
+                <input type = "radio" name = "receive" value = "no">
+            </div>
+            <div>
+                <select name="yy" id="">
+                    <option value = "" id = "">년</option>
+                </select>
+                <select name="mm" id="">
+                    <option value = "">월</option>
+                </select>
+                <select name="dd" id="">
+                    <option value = "">일</option>
+                </select>
+            </div>
+        </form>
+        <div id = "btn">
+            <button name = "bt">OK</button>
+            <button name = "bt">목차</button>
+
+            </div>
+        </div>
+        <div id = "list_page" name = "page"></div>
+    </div>
+</body>
+</html>

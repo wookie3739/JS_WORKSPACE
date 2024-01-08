@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1280px;
+            height:640px;
+            margin: 0 auto;
+            background-image: url(../images/Airplane/game_bg.jpg);
+            position:relative;
+            overflow:hidden;
+        }
+    </style>
+    <script>
+        let wrapper;
+        let bgX = 0;
+        let img;
+        let x = 0;
+        let y = 0;
+        let velX = 0; // x축 속도
+        let velY = 0; // y축 속도
+        //배경이미지의 좌표를 음수값으로 변경
+        function bgEffect(){
+            wrapper.style.backgroundPosition= bgX + 'px 0px'
+            bgX--;
+        }
+        //비행기의 좌표값을 키보드에 따라 수정한다.
+        function control(){
+            switch(event.keyCode){
+                case 37: velX = - 5;break; // left
+                case 38: velY = -5;break; // up
+                case 39: velX = 5;break; // right
+                case 40: velY = 5;break; // down
+            }
+
+        }
+        function stop(){
+            switch(event.keyCode){
+                case 37: velX = 0;break; // left
+                case 38: velY = 0;break; // up
+                case 39: velX = 0;break; // right
+                case 40: velY = 0;break; // down
+            }
+
+        }
+        function gameLoop(){
+            bgEffect(); // 배경 효과에 대한 호출
+            move(); // 주인공 움직임에 대한 호출
+
+        }
+        //주인공의 x축과 y축을 변경한다.
+        function move(){
+            // console.log(x,y);
+            x+=velX; // 속도
+            y+=velY; // 속도
+            img.style.left = x + "px";
+            img.style.top = y + "px";
+
+            // console.log(x,y);
+        }
+        function init(){
+            //비행기 생성하여 부착
+            img = document.createElement('img');
+            img.src = '../images/Airplane/plane.png';
+            wrapper = document.getElementById('wrapper');
+            wrapper.appendChild(img);
+            img.style.position="absolute";
+            //img.style.cssText = 'width:60px;';
+            img.style.width=60+"px";
+            img.style.left=0+"px";
+            img.style.top=100+"px";
+            
+            
+
+        }
+
+        addEventListener('load', function(){
+            init();
+            setInterval('gameLoop()', 10);
+        });
+    </script>
+</head>
+<body onkeydown="control()" onkeyup="stop()">
+    
+    <div id = 'wrapper'>
+
+    </div>
+
+
+
+
+
+</body>
+</html>

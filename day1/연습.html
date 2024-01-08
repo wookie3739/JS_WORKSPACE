@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        section{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+
+        }
+
+        .wrap{
+            display:flex;
+            width:400px;
+            height:400px;
+            /* background-color: red; */
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .wrap div img{
+            width:100%;
+            height:350px;
+            font-size:0;
+        }
+        button{
+            padding:10px 30px;
+            cursor: pointer;
+        }
+    </style>
+
+
+
+</head>
+
+<script>
+    let n = 0;
+    function next(){
+        //다음 닌자 이미지 나오도록
+        //문서내에 pic이라는 id를 갖는 요소를 가져온다.
+        let pic = document.getElementById("pic");
+        pic.src="../images/Ninja/Attack__00" + n + ".png의 사본.png";
+        n++;
+    }
+
+    function prev(){
+        let pic = document.getElementById("pic");
+        pic.src="../images/Ninja/Attack__00" + n + ".png의 사본.png";
+        n--;
+    }
+</script>
+
+
+
+<body>
+    
+
+<section>
+    <div class="wrap">
+        <div><img id ="pic" src ="../images/Ninja/Attack__000.png의 사본.png"></div>
+        <button onclick="next()">
+            다음
+        </button>
+        <button onclick="prev()">
+            이전
+        </button>
+    </div>
+</section>
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+

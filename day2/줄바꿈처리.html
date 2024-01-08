@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        let n = 0; // 생성 횟수를 체크하기 위한 전역변수
+        //버튼을 누르면 기존에 없었던 이미지 요소를 동적으로 실행
+        function create(){
+           let img = document.createElement("img");
+           img.src = "../images/fruit.jpg";
+           img.style.width = 50+'px';
+           
+           //br 태그를 생성하여 body 부착하자
+            if(n%5===0){
+                let p = document.createElement("p");
+            document.body.appendChild(p);
+        }
+
+           document.body.appendChild(img);
+           n++;
+           console.log(n);
+        }
+
+
+    </script>
+</head>
+<body>
+    
+<button onClick = "create()">생성하기</button>
+
+</body>
+</html>

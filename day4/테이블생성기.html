@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        //넘어온 숫자가 1자리수이면, 앞에 '0' 문자 붙이고
+        // 아니면 그냥 쓰기
+        function getNumString(n){
+            let str = "";
+            if(n<10){
+                str = "0" + n;
+            }else{
+                str = n;
+            }
+            return str;
+        }
+        let f = +prompt('층 수 입력');
+        let r = +prompt('호 수 입력');
+        //태그들을 문자열로 담게 될 전역변수
+        
+        let tag = "<table border =\"1px\">";
+            for(let i = 1; i <= f; i++){
+                tag = tag + "<tr>";
+                for(let j = 1; j <= r; j++){
+                    tag = tag + "<td>" + i + getNumString(j)+"호</td>";
+                }
+                tag = tag + "</tr>";
+                
+            }
+                document.write(tag);
+                tag = tag + "</table>";
+        
+    
+    
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

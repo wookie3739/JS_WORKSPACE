@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:600px;
+            height:100px;
+            background-color: yellow;
+            margin: 0 auto;
+            position: relative;
+        }
+    </style>
+    <script src = "../lib/common.js"></script>
+    <script>
+        let wrapper;
+        let box;
+        let boxArray = [];
+        let numArray = [];
+        class Box{
+            constructor(container, width, height, x){
+                this.container = container;
+                this.div = document.createElement('div');
+                this.width = width;
+                this.height = height;
+                this.x = x;
+
+                //스타일
+                this.div.style.border = "1px solid black";
+                this.div.style.position = "absolute";
+                this.div.style.left = this.x + "px";
+                this.div.style.width = this.width + "px";
+                this.div.style.height = this.height + "px";
+                this.div.style.textAlign = "center";
+                this.div.style.lineHeight = this.height + "px";
+                this.div.style.fontSize = 40 + "px";
+
+            
+                this.container.appendChild(this.div);
+
+            
+            }
+        }
+
+        function randomNum(){
+            for(let i = 0; i < boxArray.length; i++){
+                boxArray[i].div.innerHTML = getRandomByRange(1,46);
+            }
+        }
+        addEventListener('load', function(){
+            wrapper = document.getElementById('wrapper');
+            
+            for(let i = 0; i < 6; i++){
+                box = new Box(wrapper, 100, 100, 100*i);
+                boxArray.push(box);
+            }
+        });
+
+
+
+    </script>
+</head>
+<body>
+<button onClick = "randomNum()">추첨</button>
+<div id = "wrapper">
+
+</div>
+
+
+
+
+
+</body>
+</html>

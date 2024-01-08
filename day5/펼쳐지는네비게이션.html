@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+        }
+        #wrapper{
+            width:800px;
+            height:800px;
+            background-color: yellow;
+            margin: 0 auto;
+            position:relative;
+        }
+    </style>
+    <script>
+        let navi;
+        let a = 0.1;
+        let targetH = 50;
+        // 높이 값을 목표지점까지 변경하기
+        function move(){
+            
+            navi.style.height = parseInt(navi.style.height) + a * (targetH - parseInt(navi.style.height)) + "px"; 
+            
+        }
+        //동적으로 네비게이션 박스를 생성하자
+        function init(){
+
+            navi = document.createElement('div');
+            navi.style.width = 120 +'px';
+            navi.style.height = 50 + 'px';
+            navi.style.background = 'red';
+            document.getElementById('wrapper').appendChild(navi);
+            navi.style.position = 'absolute';
+            navi.style.left = 100 + 'px';
+            navi.style.top = 0 + 'px';
+
+            //네비게이션에 이벤트 연결
+            navi.addEventListener('mouseover', function(){
+                targetH = 500;
+            });
+            navi.addEventListener('mouseout', function(){
+                targetH = 50;
+            });
+        
+
+
+        }
+        addEventListener('load', function(){
+
+            init();
+            setInterval('move()', 10);
+
+        });
+
+    </script>
+</head>
+<body>
+    <div id = 'wrapper'></div>
+</body>
+</html>

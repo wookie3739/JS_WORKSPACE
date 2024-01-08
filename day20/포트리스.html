@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1600px;
+            height:1000px;
+            background-color: yellow;
+            margin: 0 auto;
+            border:2px solid blue;
+            box-sizing: border-box;
+            position:relative;
+            overflow: hidden;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./GameObject.js"></script>
+    <script src="./Cannon.js"></script>
+    <script src="./Hero.js"></script>
+    <script src="./InfoBox.js"></script>
+    <script src="./Bullet.js"></script>
+    <script>
+        let wrapper;
+        let hero;
+        let gameFlag = true;
+        let deg = 0;
+        let bullet;
+        let bulletArray = [];
+        let infoBox; // 정보 출력 객체를 접근하기 위한 전역변수
+        let g = 0.03; // 중력
+
+        function createInfoBox(){
+            infoBox = new InfoBox(wrapper, "",1500,400, 150, 90, 0, 0);
+        }
+        function createHero(){
+            hero = new Hero(wrapper, "", 1500, 600, 50, 50, 0, 0, "red");
+        }
+        function fire(){
+            
+            bullet = new Bullet(wrapper,"", hero.x, hero.y, 10,10,-10,-3,"red");
+            bulletArray.push(bullet);
+            //지금 현재 각도를 이용하여 sin, cos 구하자.
+            bullet.velX = -Math.cos(hero.cannon.deg*(Math.PI/180)); // 각도를 360분법으로 사용하면 안되면
+            bullet.velY = -Math.sin(hero.cannon.deg*(Math.PI/180)); // 각도를 360분법으로 사용하면 안되면
+            // 호도법을 이용한 값을 적용해야함
+
+        }
+        function gameLoop(){
+            // console.log("gameLoop call");
+            if(gameFlag){
+                hero.cannon.setDegree(deg);
+                for(let i = 0; i < bulletArray.length; i++){
+                    bulletArray[i].move();
+                }
+            }
+        }
+        $(function(){
+            wrapper = document.getElementById("wrapper");
+            createInfoBox();
+            createHero();
+            //키보드 연결
+            document.body.addEventListener('keydown', function(e){
+                switch(e.keyCode){
+                    case 27 : gameFlag = !gameFlag; break; // pause, restart 조절
+                    case 38 : deg = 1; break; // 각도 올리기
+                    case 40 : deg = -1; break; // 각도 내리기
+                    case 32 : fire(); break;
+
+                }
+            });document.body.addEventListener('keyup', function(e){
+                switch(e.keyCode){
+                    // case 27 : gameFlag = !gameFlag; break; // pause, restart 조절
+                    case 38 : deg = 0; break; // 각도 올리기
+                    case 40 : deg = 0; break; // 각도 내리기
+
+                }
+            });
+            setInterval("gameLoop()", 10);
+
+        });
+    </script>
+</head>
+<body>
+    <div id = "wrapper"></div>
+</body>
+</html>

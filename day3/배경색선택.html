@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        addEventListener("load", function(){
+            let n = prompt(" 1. red\n 2. orange\n 3. yellow\n 4. green\n 5. blue\n 6. navy\n 7. purple")
+            let c = '';
+            
+            // if(n==1){
+            //     c="red";
+            // }else if(n==2){
+            //     c="orange";
+            // }else if(n==3){
+            //     c="yellow";
+            // }else if(n==4){
+            //     c="green";
+            // }else if(n==5){
+            //     c="blue";
+            // }else if(n==6){
+
+            //     c='navy';
+            // }else if(n==7){c='purple';}
+            // else {alert('1에서 7 사이만 넣어라');}
+            
+                //else if문과 목적상 동일한 효과를 내지만, 코드를
+                // 보다 줄여쓸 수 있는 문장이 switch case문이다.
+                // 프롬프트로 입력받은 모든 데이터는 문자열로 취급되므로
+                // 정수로 변경해야한다.
+                n = parseInt(n);
+            switch(n){
+                case 1 : c = "red"; break;
+                case 2 : c="orange"; break;
+                case 3 : c = "yellow"; break;
+                case 4 : c = "green"; break;
+                case 5 : c = "blue"; break;
+                case 6 : c = "navy"; break;
+                case 7 : c = "purple"; break;
+                default : alert('1부터 7까지만 넣으라고했지.'); 
+            }
+
+           document.body.style.background = c;
+
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

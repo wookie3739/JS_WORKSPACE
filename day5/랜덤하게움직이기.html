@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        #wrap{
+            width:100%;
+            height:1000px;
+            background-image:url(../images/countryside.jpg);
+            background-size:100% 1000px;
+        }
+    </style>
+</head>
+<body onMouseDown="getPos()">
+    <div id = "wrap">
+
+    </div>
+    <script>
+        let img;
+        let a = 0.1;
+        let targetX = 0;
+        let targetY = 0;
+        addEventListener('load', function(){
+            init();
+            setInterval('move()', 10);
+        });
+        function getPos(){
+            targetX = event.clientX;
+            targetY = event.clientY;
+        }
+        //목표지점까지 감속도 공식으로 접근하기
+        // 내 위치 = 현 위치 + 퍼센트(클릭한 위치 - 현 위치);
+        function move(){
+            img.style.left = parseInt(img.style.left) + a*(targetX - parseInt(img.style.left));
+            img.style.top = parseInt(img.style.top) + a*(targetY - parseInt(img.style.top));
+        }
+        function init(){
+            //프로그램 시작과 동시에 하고픈 작업이 있다면 여기서 처리한다.
+            img = document.createElement('img');
+            img.src = "../images/firefly.png";
+            img.style.position = 'absolute';
+            img.style.left = 0 +'px';
+            img.style.top = 0 + 'px';
+            img.style.width = 40 + 'px';
+            document.getElementById('wrap').appendChild(img);
+        }
+    </script>
+</body>
+</html>

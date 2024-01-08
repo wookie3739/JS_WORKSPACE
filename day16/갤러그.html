@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        #wrapper{
+            width:1000px;
+            height:800px;
+            margin: 0 auto;
+            background-image: url(../images/Gallerxy/bg.png);
+            position:relative;
+
+        }
+    </style>
+    <script src = "./Hero.js"></script>
+    <script src = "./Enemy.js"></script>
+    <script src = "./Bullet.js"></script>
+    <script src = "../lib/common.js"></script>
+    <script>
+        let enemyArray = [
+            "../images/Gallerxy/blue_king.png",
+            "../images/Gallerxy/green_king.png",
+            "../images/Gallerxy/enemy1.png",
+            "../images/Gallerxy/enemy2.png"
+        ];
+        let enemyDblArray = [];
+        let wrapper;
+        let bgY = 0; // 배경의 y축 값을 누적시킬 전역변수
+        let hero;
+        let bulletArray = [];
+
+        function bgEffect(){
+            bgY++;
+            wrapper.style.backgroundPosition = "0px " + bgY + "px";
+        }
+        function createHero(){
+           hero = new Hero(wrapper, '../images/Gallerxy/ship.png', 450,700,50,50,0,0);
+        }
+        function createEnemy(){
+            
+            for(let i = 0; i < enemyArray.length; i++){
+                let arr = [];
+                for(let a = 0; a < 20; a++){
+                    
+                    let enemy = new Enemy(wrapper, enemyArray[i],80 + a*(40+2),i*50,50,50,0,0);
+                    arr.push(enemy);
+                }
+                enemyDblArray.push(arr);
+            }
+        }
+        //총알 발사 !
+        function fire(){
+            let bullet = new Bullet(wrapper, "../images/Gallerxy/bullet.png", hero.x + (hero.width * 0.5), hero.y,7,17,0,-10);
+            bulletArray.push(bullet);
+        }
+        function gameLoop(){
+            bgEffect();
+            hero.move();
+
+            for(let i = 0; i < bulletArray.length; i++){
+                bulletArray[i].move();
+            }
+        }
+        addEventListener('load', function(){
+            wrapper = document.getElementById("wrapper");
+            createHero();
+            //키보드 이벤트 연결
+            document.body.addEventListener('keydown', function(){
+                switch(event.keyCode){
+                    case 32: fire(); break;
+                    case 37: hero.velX = -5;break;
+                    case 39: hero.velX = 5;break;
+                }
+            });
+            document.body.addEventListener('keyup', function(){
+                switch(event.keyCode){
+
+                    case 37: hero.velX = 0;break;
+                    case 39: hero.velX = 0;break;
+                }
+            });
+            createEnemy();
+            setInterval("gameLoop()", 10);
+            // container, src, x, y, width, height, velX, velY
+        });
+    </script>
+</head>
+<body>
+    
+    <div id = "wrapper"></div>
+</body>
+</html>

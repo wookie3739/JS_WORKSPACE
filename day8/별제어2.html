@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let spanArray = [];
+        let br;
+        let span;
+        function init(){
+            for(let a = 0; a < 5; a++){
+                let arr = [];
+                br = document.createElement('br');
+                for(let i = 0; i < 10; i++){
+                    
+                    span = document.createElement('span');
+                    span.innerText = '★';
+                    
+                    document.body.appendChild(span);
+                    arr.push(span);
+                    
+                    span.addEventListener('click', function(){
+                        console.log('저는 몇 ',a,'층 몇',i,'호에 살아요');
+                        this.style.color = 'red';
+                    });
+                }   document.body.appendChild(br);
+                //10개의 별을 담고 있는 arr을 spanArray에 밀어넣자
+                    spanArray.push(arr);
+            }       
+            // for(let i = 0; i < spanArray[2].length; i++){
+            //     spanArray[2][i].style.color = 'red';
+
+            // }
+            
+        }
+
+        addEventListener('load', function(){
+            init();
+        });
+
+
+
+
+
+
+
+       
+    </script>
+</head>
+
+<body>
+    
+</body>
+</html>

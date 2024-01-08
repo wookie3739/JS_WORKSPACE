@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        #map{
+            width:100%;
+            height:900px;
+        }
+
+    </style>
+    <script>
+
+    //관련성 있는 정보들을 하나의 객체에 넣어서 관리해보자
+    let stores;
+    //맵이 로드 될 때 호출 될 함수
+    function initMap(){
+        stores = [
+        //하나의 상점에 대한 정보    
+            {
+                pos : [37.61908, 126.7191],
+                url : "enemy1.jpg",
+                msg : "하이미디어"
+            },
+            {
+                pos : [37.61903, 126.7209],
+                url : "enemy2.jpg",
+                msg : "함초령팔당냉면"
+            },
+            {
+                pos : [37.61879, 126.7182],
+                url : "enemy3.jpg",
+                msg : "KFC"
+            },
+            {
+                pos : [37.61845, 126.7179],
+                url : "enemy4.jpg",
+                msg : "스타벅스"
+            },
+            {
+                pos : [37.61740, 126.7168],
+                url : "plane.png",
+                msg : "행복한 밥상"
+            }
+        ];
+        //JSON 내장객체를 mapProp으로 받음.
+        var mapProp= {
+            center:new google.maps.LatLng(37.61908, 126.7191),
+            zoom:19,
+        };
+        var map = new google.maps.Map(document.getElementById("map"),mapProp);
+        
+        for(let i = 0; i < stores.length; i++){
+
+            //맵에 사용할 마커 만들기
+            
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(stores[i].pos[0], stores[i].pos[1]),
+                animation:google.maps.Animation.BOUNCE,
+                icon:{
+                    url: '../images/Airplane/'+ stores[i].url,
+                    scaledSize : new google.maps.Size(45,45)   
+                }
+            });
+
+            marker.setMap(map); // 어느 맵에 적용할지
+
+            //윈도우 생성하기
+            var infowindow = new google.maps.InfoWindow({
+                content: stores[i].msg
+            });
+
+            infowindow.open(map,marker);
+        }
+    }
+    </script>
+</head>
+<body>
+    
+    <div id = "map"></div>
+
+
+
+</body>
+</html>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2WllNTLdaoOO_IxUJ0rVaad0DopxLeao&callback=initMap"></script>

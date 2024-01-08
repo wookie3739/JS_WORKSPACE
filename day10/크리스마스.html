@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src = "../lib/common.js"></script>
+    <style>
+
+        #wrapper{
+            width:1200px;
+            height:900px;
+            margin: 0 auto;
+            background-image: url(../images/크리스마스.jpg);
+            background-size: 1200px 900px;
+            object-fit: cover;
+            /* font-size: 0; */
+            position: relative;
+        }
+
+
+    </style>
+
+    <script>
+        let wrapper;
+        let s;
+        let snowArray = []; // 모든 생성된 눈을 담기 위한 배열
+        //눈을 정의한다
+        // 클래스는 프로그래밍 언어의 신기술이 아니라
+        // 그냥 기존의 변수, 함수를 하나의 단위로 묶어놓은 단위일 뿐이다.
+        // 변수(사물의 상태), 함수(사물의 동작)
+        class Snow{
+            
+            constructor(x,y,velX,velY,w,h,op){
+
+                //객체와 생명을 같이 하는 객체 소속 변수 멤버변수
+                this.x = x; // 눈의 x 좌표
+                this.y = y; // 눈의 y 좌표
+                this.velX = velX; // 눈의 x 축 방향으로의 속도
+                this.velY = velY; // 눈의 y 축 방향으로의 속도
+                this.width = w;
+                this.height = h;
+                this.op = op; //투명도
+
+                this.div = document.createElement('div');
+                this.div.style.width = this.width+"px";
+                this.div.style.height = this.height + "px";
+                this.div.style.backgroundColor = "rgba(255,255,255,"+this.op+")";
+                this.div.style.position = "absolute";
+                this.div.style.left = this.x + "px"; // 랜덤
+                this.div.style.top = this.y + "px"; // 랜덤
+                this.div.style.borderRadius = 50 + "%";
+                this.div.style.filter = "blur(2px)";
+                //화면에 부착
+                wrapper.appendChild(this.div);
+            }
+            //눈이 내리는 동작을 표현하는 메서드를 정의한다
+            move(){
+                this.x = this.x + this.velX; // 누적식
+                this.y = this.y + this.velY;
+                this.div.style.left = this.x + "px";
+                this.div.style.top = this.y + "px";
+            }
+
+
+        }
+        //눈 거푸집으로부터 객체 하나를 생성해보자
+        function createSnow(){
+            for(let i = 0; i < 300; i++){
+                let x = getRandom(1200);
+                let y = getRandom(900);
+                let velX = getRandomByRange(-5,5); // -5, 5
+                let velY = getRandomByRange(1,7); // 1 ~ 7
+                let w = getRandomByRange(3,6);
+                let h = getRandomByRange(3,6);
+                let op = getRandomByRange(0.1,2);
+                let s = new Snow(x,y,velX,velY,w,h,op); // 생성자 호출하여 인스턴스 생성
+
+                snowArray.push(s);
+            }
+        }
+        function gameLoop(){
+            for(let i = 0; i < snowArray.length; i++){
+
+                snowArray[i].move(); 
+            }
+        }
+        function createInterval(){
+            createSnow();
+        }
+        addEventListener('load', function(){
+            wrapper = document.getElementById('wrapper');
+            //눈을 생성한다
+            createSnow();
+            setInterval('gameLoop()', 100);
+            setInterval('createInterval()', 8000);
+        });
+
+
+
+    </script>
+</head>
+<body>
+    <div id = "wrapper"></div>
+</body>
+</html>

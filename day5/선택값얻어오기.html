@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <select id = 'fruit' onChange = 'setValue(this.value)'>
+        <option>과일 선택</option>
+        <option value = "사과">사과</option>
+        <option value ="오렌지">오렌지</option>
+        <option value = "바나나">바나나</option>
+        <option value = "복숭아">복숭아</option>
+    </select>
+    <input id = 'msg' type="text">
+
+    <script>
+
+        function setValue(v){
+            //선택 박스에서 선택한 값을 텍스트박스에 대입하자
+            let msg = document.getElementById('msg');
+            msg.value = v;
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper {
+            width: 900px;
+            height: 1000px;
+            margin: auto;
+        }
+        img {
+            width: 100%;
+            height: 750px;
+            background: aqua;
+        }
+        #content {
+            width: 100%;
+            height: 200px;
+            background-color: aquamarine;
+        }
+        #footer {
+            width: 100%;
+            height: 50px;
+            background-color: blueviolet;
+            position: relative;
+        }
+    </style>
+    <script src="../lib/marble.js"></script>
+    <script>
+        let footer;
+        let photo;
+        let content;
+        
+        /*영화를 정의한다.*/
+        class Movie {
+            constructor(container, title, url, date, time, x){
+                /*제목, url , 개봉일, 러닝타임, 이미지*/
+                this.container= container;
+                this.title = title;
+                this.url = url;
+                this.date = date;
+                this.time = time;
+                this.img  = document.createElement("img");
+                this.x=x;
+                //스타일 설정
+                this.img.src= this.url;
+                this.img.style.position = "absolute";
+                this.img.style.left = this.x + "px";
+                this.img.style.width = 40 +"px";
+                this.img.style.height = 40 +"px";
+                //이미지에 이벤트 연결
+                this.img.addEventListener("click", ()=>{
+                    console.log("영화제목", this.title);
+                    setInfo(this); //나(객체 전부)를 전달한다 
+                });
+                //부착
+                this.container.appendChild(this.img);
+            }
+        }
+        //영화 한편에 대한 정보를 출력해본다.
+        function setInfo(obj){
+            console.log("넘겨받은 영화객체는", obj);
+            //영화 큰 이미지 보여주기
+            photo.src = obj.url;
+            let str="";
+            str += "영화제목:" + obj.title + "\n"; 
+            str += "개봉일:" +obj.date +"\n"; 
+            str += "러닝타임:" +obj.time+"\n"; 
+            content.innerText = str;
+            //감속도 공식으로 소환하기
+            
+        }
+        
+      
+        //img 요소를 생성하되. json 요소로 
+        function createThumb(){
+            //영화수만큼 반복문을 수행하되, url을 가져오자
+            for(let i=0; i< movie.marvel.length; i++){
+                // console.log(movie.marvel[i].url);
+                // constructor(container, title, url, date, time, x)
+                let title = movie.marvel[i].title;
+                let url = movie.marvel[i].url;
+                let date = movie.marvel[i].release_date;
+                let time = movie.marvel[i].running_time;
+                
+                let m = new Movie(footer, title, url, date, time, 45*i)
+            }
+        }
+        addEventListener("load", function(){
+            photo = document.getElementById("photo");
+            content = document.getElementById("content");
+            footer = document.getElementById("footer");
+            createThumb();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <img id="photo">
+        <div id="content"></div>
+        <div id="footer"></div>
+    </div>
+</body>
+</html>

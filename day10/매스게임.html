@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src = '../lib/cell.js'></script>
+    <script>
+        let wrapper;
+        let cellWidth = 10; // 각 셀의 너비
+        let cellHeight = 10; // 각 셀의 높이
+        let row = 50; // 셀의 층 수 
+        let col = 50; // 셀의 호 수
+        let cellArray = [];
+        // constructor(container, x, y, width, height, bg)
+        function createCell(){
+            for(i = 0; i<row; i++){
+                let arr = [];
+                for(a = 0; a<col; a++){
+                    let cell = new Cell(wrapper,a*cellWidth,i*cellHeight,cellWidth,cellHeight,"green");
+                    arr.push(cell); 
+                }
+                cellArray.push(arr);
+            }
+        }
+
+        function gameLoop(){
+            for(let i = 0; i < cellArray.length; i++){
+                for(let a = 0; a < cellArray[i].length; a++){
+                    cellArray[i][a].render();
+                }
+            }
+        }
+
+        addEventListener('load', function(){
+            wrapper = document.createElement('div');
+            wrapper.style.width = (cellWidth * col) + "px";
+            wrapper.style.height = (cellHeight * row) + "px";
+            wrapper.style.backgroundImage = "url(../images/크리스마스.jpg)";
+            wrapper.style.backgroundSize = (cellWidth * col) + "px " + (cellHeight * row) + "px";
+            wrapper.style.margin = "0 auto";
+            wrapper.style.position = "relative";
+            document.body.appendChild(wrapper);
+
+            //다수의 셀 생성하기
+            createCell();
+            setInterval("gameLoop()", 100);
+        });
+
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
